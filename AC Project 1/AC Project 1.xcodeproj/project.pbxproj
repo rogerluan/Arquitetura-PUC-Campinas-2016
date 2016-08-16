@@ -6,10 +6,15 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXFileReference section */
+		C5E288CB1D6358A300B9D091 /* main.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = main.s; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		C5E288C41D63586E00B9D091 = {
 			isa = PBXGroup;
 			children = (
+				C5E288CB1D6358A300B9D091 /* main.s */,
 			);
 			sourceTree = "<group>";
 		};
