@@ -57,7 +57,7 @@ database:           .space 400
 # messages
 message_menu:       .asciiz "\n Escolha qual operacao realizar: \n \t 1-Armazenar \n \t 2-Excluir \n \t 3-Exibir \n \t 4-Exibir Consumo \n \t 5-Exibir Preco Medio \n \t 6-Exibir Ranking\n"
 message_date:       .asciiz "\n Dia: "
-message_slash:      .asciiz "/"
+message_slash:      .asciiz "\r/"
 message_name:       .asciiz "\n Nome: "
 message_kilometer:  .asciiz "\n Quilometragem: "
 message_liters:     .asciiz "\n Quantidade: "
@@ -108,8 +108,9 @@ store:
     la $a0, message_date
     jal displayMessage
     
+
+    jal loadDatabase
     jal readInt
-    la  $t0, database
     sw  $v0, 0($t0)
     
     la $a0, message_slash
@@ -209,11 +210,11 @@ readName:
 
     
 loadDatabase:
-#to-do: fix loadDatabase and the following methods, since they're not working
     la $t0, database
-    addi $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
-    mult $s7, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
-    mflo $v0                            #
+    addi $t1, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
+    mult $s7, $t1                       #multiplies counter*STRUCT_TOTAL_SIZE
+    mflo $t2                            #
+    add $v0, $t0, $t2
     jr $ra
 
 
