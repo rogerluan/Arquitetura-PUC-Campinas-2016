@@ -55,7 +55,7 @@ MENU_RANKING        = 6
 database:           .space 400
 
 # messages
-message_menu:       .asciiz "\n Escolha qual operacao realizar: \n \t 1-Armazenar \n \t 2-Excluir \n \t 3-Exibir \n \t 4-Exibir Consumo \n \t 5-Exibir Preco Medio \n \t 6-Exibir Ranking\n"
+message_menu:       .asciiz "\n Escolha qual operacao realizar: \n 1- Cadastrar abastecimento \n 2- Excluir abastecimento \n 3- Exibir abastecimentos \n 4- Exibir consumo médio \n 5- Exibir preço médio \n 6- Exibir ranking de postos\n"
 message_date:       .asciiz "\n Dia: "
 message_slash:      .asciiz "\r/"
 message_name:       .asciiz "\n Nome: "
@@ -63,6 +63,8 @@ message_kilometer:  .asciiz "\n Quilometragem: "
 message_liters:     .asciiz "\n Quantidade: "
 message_price:      .asciiz "\n Preco: "
 message_invalid:    .asciiz "\n Valor invalido"
+
+message_option:     .asciiz "\n Opcao: "
 
 actionMessage_store:        .asciiz "\n Armazenar"
 actionMessage_delete:       .asciiz "\n Excluir"
@@ -82,6 +84,8 @@ main:
 
 menu:
     la $a0, message_menu
+    jal displayMessage
+    la $a0, message_option
     jal displayMessage
     jal readInt
     
@@ -211,10 +215,11 @@ readName:
     
 loadDatabase:
     la $t0, database
-    addi $t1, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
-    mult $s7, $t1                       #multiplies counter*STRUCT_TOTAL_SIZE
-    mflo $t2                            #
-    add $v0, $t0, $t2
+    lw $t1, 0($s7)
+    addi $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
+    mult $t1, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
+    mflo $t3                            #
+    add $v0, $t0, $t3
     jr $ra
 
 
