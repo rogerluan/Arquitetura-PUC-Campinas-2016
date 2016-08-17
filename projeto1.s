@@ -83,7 +83,6 @@ main:
 menu:
     la $a0, message_menu
     jal displayMessage
-    #print_string_var(message_menu)
     jal readInt
     
     beq $v0, MENU_STORE, store
@@ -93,7 +92,6 @@ menu:
     beq $v0, MENU_PRICE, price
     beq $v0, MENU_RANKING, ranking
 
-    #print_string_var(message_invalid)
     la $a0, message_invalid
     jal displayMessage
     j menu
@@ -182,44 +180,49 @@ displayMessage:
     li $v0, SYS_PRINT_STRING
     syscall
     jr $ra
-    
+
+
 readInt:
     li $v0, SYS_READ_INT
     syscall
     jr $ra
-    
+
+
 readFloat:
     li $v0, SYS_READ_FLOAT
     syscall
     jr $ra
-    
+
+
 readDouble:
     li $v0, SYS_READ_DOUBLE
     syscall
     jr $ra
-    
+
+
 readName:
     li $v0, SYS_READ_STRING
     la $a0, buffer
     li $a1, STRUCT_NAME_SIZE
     add $v1, $a0, $zero
     jr $ra
-    
-loadAddress:
-#to-do: fix loadAddress and the following methods, since they're not working
-    la $t0, database
-    lw $t1, $s7
-    addi $t2, $zero, STRUCT_TOTAL_SIZE
-    mult $t1, $t2
 
-    mflo $v0
-    jr $ra
     
+loadDatabase:
+#to-do: fix loadDatabase and the following methods, since they're not working
+    la $t0, database
+    addi $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
+    mult $s7, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
+    mflo $v0                            #
+    jr $ra
+
+
 #incrementRegister:
  #   lw $t0, $s7
   #  addi $t0, $t0, 1
    # sw $s7, $t0
     #jr $ra
+
 
 #decrementRegister:
  #   lw $t0, $s7
