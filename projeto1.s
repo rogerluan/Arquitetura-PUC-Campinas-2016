@@ -1,158 +1,228 @@
+# Code Quality Standards http://www.cs.uwm.edu/classes/cs315/Bacon/Lecture/HTML/ch07.html
+# Please read:
+
+# Default development language: English
+# Commas are followed by a whitespace.
+# Macros cannot be used in QtSpim.
+
+#########################################################################
+#   System call constants
+#########################################################################
+
+SYS_PRINT_INT       =   1
+SYS_PRINT_FLOAT     =   2
+SYS_PRINT_DOUBLE    =   3
+SYS_PRINT_STRING    =   4
+SYS_READ_INT        =   5
+SYS_READ_FLOAT      =   6
+SYS_READ_DOUBLE     =   7
+SYS_READ_STRING     =   8
+SYS_SBRK            =   9
+SYS_EXIT            =   10
+SYS_PRINT_CHAR      =   11
+SYS_READ_CHAR       =   12
+
+#########################################################################
+#   Program defined constants
+#########################################################################
+
+STRUCT_TOTAL_SIZE   = 40
+STRUCT_NAME_SIZE    = 16
+MENU_STORE          = 1
+MENU_DELETE         = 2
+MENU_DISPLAY        = 3
+MENU_CONSUMPTION    = 4
+MENU_PRICE          = 5
+MENU_RANKING        = 6
+
+#########################################################################
+#   Macro definitions and includes. See http://www.cs.uwm.edu/classes/cs315/Bacon/Lecture/HTML/ch09s03.html
+#########################################################################
+
+	# Print the string at address $var
+	#.macro  print_string_var($var)
+	#la      $a0, $var
+	#li      $v0, SYS_PRINT_STRING
+	#syscall
+	#.end_macro
+
+#########################################################################
+#   Main program
+#########################################################################
+
 .data
-armazenador: .space 400 
-msg1: .asciiz "\n Armazenar"
-msgdata: .asciiz "\n Dia: "
-msgbarra: .asciiz "/"
-msgnome: .asciiz "\n Nome: "
-msgkm: .asciiz "\n Quilometragem: "
-msgqnt: .asciiz "\n Quantidade: "
-msgpreco: .asciiz "\n Preco: "
-msg8: .asciiz "\n Escolha qual operacao realizar: \n \t 1-Armazenar \n \t 2-Excluir \n \t 3-Exibir \n \t 4-Exibir Consumo \n \t 5-Exibir Preco Medio \n \t 6-Exibir Ranking\n"
-msg9: .asciiz "\n Valor invalido"
-msg10: .asciiz "\n Excluir"
-msg11: .asciiz "\n Exibir"
-msg12: .asciiz "\n Consumo"
-msg13: .asciiz "\n Preco"
-msg14: .asciiz "\n Ranking"
+# database
+database:           .space 400
+
+# messages
+message_menu:       .asciiz "\n Escolha qual operacao realizar: \n \t 1-Armazenar \n \t 2-Excluir \n \t 3-Exibir \n \t 4-Exibir Consumo \n \t 5-Exibir Preco Medio \n \t 6-Exibir Ranking\n"
+message_date:       .asciiz "\n Dia: "
+message_slash:      .asciiz "/"
+message_name:       .asciiz "\n Nome: "
+message_kilometer:  .asciiz "\n Quilometragem: "
+message_liters:     .asciiz "\n Quantidade: "
+message_price:      .asciiz "\n Preco: "
+message_invalid:    .asciiz "\n Valor invalido"
+
+actionMessage_store:        .asciiz "\n Armazenar"
+actionMessage_delete:       .asciiz "\n Excluir"
+actionMessage_display:      .asciiz "\n Exibir"
+actionMessage_consumption:  .asciiz "\n Consumo"
+actionMessage_price:        .asciiz "\n Preco"
+actionMessage_ranking:      .asciiz "\n Ranking"
 
 .text
 .globl main
-main: 
-    add $s7, $zero, $zero	# Limpa o conteúdo do nosso contador
-    
+
+main:
+    add $s7, $zero, $zero	# Limpa o conteúdo do contador
+    add $t0, $zero, $zero	# Limpa o conteúdo do t0
+    add $t1, $zero, $zero	# Limpa o conteúdo do t1
 
 
-cabecalho:
+menu:
+    la $a0, message_menu
+    jal displayMessage
+    #print_string_var(message_menu)
+    jal readInt
     
+    beq $v0, MENU_STORE, store
+    beq $v0, MENU_DELETE, delete
+    beq $v0, MENU_DISPLAY, exibir
+    beq $v0, MENU_CONSUMPTION, consumption
+    beq $v0, MENU_PRICE, price
+    beq $v0, MENU_RANKING, ranking
+
+    #print_string_var(message_invalid)
+    la $a0, message_invalid
+    jal displayMessage
+    j menu
+
+
+#########################################################################
+#   Actions
+#########################################################################
+
+store:
+    la $a0, actionMessage_store
+    jal displayMessage
     
-    la $a0, msg8
-    jal ExibirMensagem
+    la $a0, message_date
+    jal displayMessage
     
-    jal LerInt
-    
-    beq $v0,1,armazenar
-    #beq $v0,2,excluir
-    #beq $v0,3,exibir
-    #beq $v0,4,consumo
-    #beq $v0,5,preco
-    #beq $v0,6,ranking
-    
-   
-    la $a0, msg9
-     jal ExibirMensagem
-    j cabecalho
-    
-armazenar:
-    
-    la $a0, msg1
-    jal ExibirMensagem
-    
-    la $a0, msgdata
-    jal ExibirMensagem
-    
-    jal LerInt
-    la  $t0, armazenador
+    jal readInt
+    la  $t0, database
     sw  $v0, 0($t0)
     
-    la $a0, msgbarra
-    jal ExibirMensagem
+    la $a0, message_slash
+    jal displayMessage
     
-    jal LerInt
-    la  $t0, armazenador
+    jal readInt
+    la  $t0, database
     sw  $v0, 4($t0)
     
-    la $a0, msgbarra
-    jal ExibirMensagem
+    la $a0, message_slash
+    jal displayMessage
     
-    jal LerInt
-    la  $t0, armazenador
+    jal readInt
+    la  $t0, database
     sw  $v0, 8($t0)
     
-    la $a0, msgnome
-    jal ExibirMensagem
+    la $a0, message_name
+    jal displayMessage
     
-    la $a0, msgkm
-    jal ExibirMensagem
+    la $a0, message_kilometer
+    jal displayMessage
     
-    la $a0, msgqnt
-    jal ExibirMensagem
+    la $a0, message_liters
+    jal displayMessage
     
-    la $a0, msgpreco
-    jal ExibirMensagem
+    la $a0, message_price
+    jal displayMessage
     
-    jr cabecalho
-    
+    jr menu
 
-#excluir:
- #   li $v0,4
-  #  la $a0,msg10
-   # j cabecalho
-# shift left 40 bits para excluir
-    
-#exibir:
- #   li $v0,4
-  #  la $a0,msg11
-   # j cabecalho
 
-#consumo:
- #   li $v0,4
-  #  la $a0,msg12
-   # j cabecalho
-    
-#preco:
- #   li $v0,4
-  #  la $a0,msg13
-   # j cabecalho
-    
-#ranking:
- #   li $v0,4
-  #  la $a0,msg14
-   # j cabecalho
-    
-#################HELPER####################
+delete:
+    li $v0, 4
+    la $a0, actionMessage_delete
+    j menu
+    #shift left 40 bits para excluir
 
-ExibirMensagem:
-    li $v0,4
+
+exibir:
+    li $v0, 4
+    la $a0, actionMessage_display
+    j menu
+
+
+consumption:
+    li $v0, 4
+    la $a0, actionMessage_consumption
+    j menu
+
+
+price:
+    li $v0, 4
+    la $a0, actionMessage_price
+    j menu
+
+
+ranking:
+    li $v0, 4
+    la $a0, actionMessage_ranking
+    j menu
+
+
+#########################################################################
+#   Helpers
+#########################################################################
+
+displayMessage:
+    li $v0, SYS_PRINT_STRING
     syscall
     jr $ra
     
-LerInt:
-    li $v0,5
+readInt:
+    li $v0, SYS_READ_INT
     syscall
     jr $ra
     
-LerFloat:
-    li $v0,6
+readFloat:
+    li $v0, SYS_READ_FLOAT
     syscall
     jr $ra
     
-LerDouble:
-    li $v0,7
+readDouble:
+    li $v0, SYS_READ_DOUBLE
     syscall
     jr $ra
     
-LerEstabelecimento:
-    li $v0,8
-    la $a0,buffer
-    li $a1, 16
-    add $v1,$a0, $zero
+readName:
+    li $v0, SYS_READ_STRING
+    la $a0, buffer
+    li $a1, STRUCT_NAME_SIZE
+    add $v1, $a0, $zero
     jr $ra
     
-LoadEndereco:
-    la  $t0, armazenador
-    lb $t1, $s7
-    addi $t2, 40, $zero 
+loadAddress:
+#to-do: fix loadAddress and the following methods, since they're not working
+    la $t0, database
+    lw $t1, $s7
+    addi $t2, $zero, STRUCT_TOTAL_SIZE
     mult $t1, $t2
-    
+
     mflo $v0
     jr $ra
     
-IncremetarEstabelecimento:
-    lb $t0, $s7
-    addi $t0, $t0, 1
-    sb $s7, $t0
+#incrementRegister:
+ #   lw $t0, $s7
+  #  addi $t0, $t0, 1
+   # sw $s7, $t0
+    #jr $ra
 
-DecremetarEstabelecimento:
-    lb $t0, $s7
-    addi $t0, $t0, -1
-    sb $s7, $t0
+#decrementRegister:
+ #   lw $t0, $s7
+  #  addi $t0, $t0, -1
+   # sw $s7, $t0
+    #jr $ra
