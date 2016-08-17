@@ -211,8 +211,9 @@ readName:
 loadDatabase:
 #to-do: fix loadDatabase and the following methods, since they're not working
     la $t0, database
+    lw $t1, 0($s7)
     addi $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
-    mult $s7, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
+    mult $t1, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
     mflo $v0                            #
     jr $ra
 
