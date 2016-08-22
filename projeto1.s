@@ -56,8 +56,9 @@ database:           .space 400
 
 # messages
 message_menu:       .asciiz "\n Escolha qual operacao realizar: \n 1- Cadastrar abastecimento \n 2- Excluir abastecimento \n 3- Exibir abastecimentos \n 4- Exibir consumo médio \n 5- Exibir preço médio \n 6- Exibir ranking de postos\n"
-message_date:       .asciiz "\n Dia: "
-message_slash:      .asciiz "\r/"
+message_day:        .asciiz "\n Dia: "
+message_month:      .asciiz " Mes: "
+message_year:       .asciiz " Ano: "
 message_name:       .asciiz "\n Nome: "
 message_kilometer:  .asciiz "\n Quilometragem: "
 message_liters:     .asciiz "\n Quantidade: "
@@ -77,7 +78,7 @@ actionMessage_ranking:      .asciiz "\n Ranking"
 .globl main
 
 main:
-    add $s7, $zero, $zero	# Limpa o conteúdo do contador
+    addi $s7, $zero, 0	# Limpa o conteúdo do contador
     add $t0, $zero, $zero	# Limpa o conteúdo do t0
     add $t1, $zero, $zero	# Limpa o conteúdo do t1
 
@@ -108,31 +109,36 @@ menu:
 store:
     la $a0, actionMessage_store
     jal displayMessage
-    
-    la $a0, message_date
+
+    #reads day
+    la $a0, message_day
     jal displayMessage
-    
 
     jal loadDatabase
     jal readInt
-    sw  $v0, 0($t0)
-    
-    la $a0, message_slash
+    sw $v0, 0($t0)
+
+    #reads month
+    la $a0, message_month
     jal displayMessage
     
     jal readInt
-    la  $t0, database
     sw  $v0, 4($t0)
-    
-    la $a0, message_slash
+
+    #reads year
+    la $a0, message_year
     jal displayMessage
     
     jal readInt
-    la  $t0, database
     sw  $v0, 8($t0)
-    
+
+
+    #reads name
     la $a0, message_name
     jal displayMessage
+
+    jal readName
+    la $t0,
     
     la $a0, message_kilometer
     jal displayMessage
@@ -214,12 +220,23 @@ readName:
 
     
 loadDatabase:
+    #not working:
+
+    #la $t0, database
+    #lw $t1, 0($s7)
+    #addi $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
+    #mult $t1, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
+    #mflo $t3                            #
+    #add $v0, $t0, $t3
+
+    #this works:
+
     la $t0, database
-    lw $t1, 0($s7)
-    addi $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
-    mult $t1, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
+    addi $t1, $zero, STRUCT_TOTAL_SIZE  #loads $t1 with STRUCT_TOTAL_SIZE
+    mult $t1, $s7                       #multiplies counter*STRUCT_TOTAL_SIZE
     mflo $t3                            #
-    add $v0, $t0, $t3
+    add $v1, $t0, $t2
+
     jr $ra
 
 
