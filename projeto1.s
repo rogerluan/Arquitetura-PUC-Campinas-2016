@@ -84,22 +84,22 @@ main:
     add $t1, $zero, $zero	# Limpa o conteúdo do t1
 
 menu:
-    la $a0, message_menu
-    jal displayMessage
-    la $a0, message_option
-    jal displayMessage
-    jal readInt
+    la      $a0, message_menu
+    jal     displayMessage
+    la      $a0, message_option
+    jal     displayMessage
+    jal     readInt
     
-    beq $v0, MENU_STORE, store
-    beq $v0, MENU_DELETE, delete
-    beq $v0, MENU_DISPLAY, exibir
-    beq $v0, MENU_CONSUMPTION, consumption
-    beq $v0, MENU_PRICE, price
-    beq $v0, MENU_RANKING, ranking
+    beq     $v0, MENU_STORE, store
+    beq     $v0, MENU_DELETE, delete
+    beq     $v0, MENU_DISPLAY, listPlaces
+    beq     $v0, MENU_CONSUMPTION, consumption
+    beq     $v0, MENU_PRICE, price
+    beq     $v0, MENU_RANKING, ranking
 
-    la $a0, message_invalid
-    jal displayMessage
-    j menu
+    la      $a0, message_invalid
+    jal     displayMessage
+    j       menu
 
 
 #########################################################################
@@ -107,94 +107,151 @@ menu:
 #########################################################################
 
 store:
-    la $a0, actionMessage_store
-    jal displayMessage
+    la      $a0, actionMessage_store
+    jal     displayMessage
 
     #reads day
-    la $a0, message_day
-    jal displayMessage
+    la      $a0, message_day
+    jal     displayMessage
 
-    jal loadDatabase
-    jal readInt
-    sw $v0, 0($t0)
+    jal     loadDatabase
+    jal     readInt
+    sw      $v0, 0($s1)
 
     #reads month
-    la $a0, message_month
-    jal displayMessage
+    la      $a0, message_month
+    jal     displayMessage
     
-    jal readInt
-    sw  $v0, 4($t0)
+    jal     readInt
+    sw      $v0, 4($s1)
 
     #reads year
-    la $a0, message_year
-    jal displayMessage
+    la      $a0, message_year
+    jal     displayMessage
     
-    jal readInt
-    sw  $v0, 8($t0)
+    jal     readInt
+    sw      $v0, 8($s1)
 
     #reads name
-    la $a0, message_name
-    jal displayMessage
+    la      $a0, message_name
+    jal     displayMessage
 
-    jal readName
-    sw $v1,12($t0)
+    jal     readName
+    sw      $v1, 12($s1)
     
     
     #reads kilometer
-    la $a0, message_kilometer
-    jal displayMessage
+    la      $a0, message_kilometer
+    jal     displayMessage
     
-    jal readFloat
-    sw $v0, 28($t0)
+    jal     readFloat
+    sw      $f0, 28($s1)
     
     #reads consumption
-    la $a0, message_liters
-    jal displayMessage
+    la      $a0, message_liters
+    jal     displayMessage
     
-    jal readFloat
-    sw $v0, 32($t0)
-    
+    jal     readFloat
+    sw      $f0, 32($s1)
+
     #reads price
-    la $a0, message_price
-    jal displayMessage
+    la      $a0, message_price
+    jal     displayMessage
     
-    jal readFloat
-    sw $v0, 36($t0)
+    jal     readFloat
+    sw      $f0, 36($s1)
     
-    jal incrementRegister
+    jal     incrementRegister
     
-    jr menu
+    jr      menu
 
 
 delete:
-    li $v0, 4
-    la $a0, actionMessage_delete
-    j menu
+    li      $v0, 4
+    la      $a0, actionMessage_delete
+    j       menu
     #shift left 40 bits para excluir
 
 
-exibir:
-    li $v0, 4
-    la $a0, actionMessage_display
-    j menu
+listPlaces:
 
+    la      $t0, database
+    add     $t1, $s7, $zero
+    add     $t2, $t2, $zero #reset $t2
+startLoop:
+    #stop condition
+    slti    $t3, $t1, 1
+    bne     $t3, $zero, endLoop #if counter < 1, exit
+
+    #list place
+    addi    $t2, $t2, 1         #adds 1 to the printed counter
+
+    add     $a0, $zero, $t0     #prepares print function to print day
+    li      $v0, SYS_PRINT_INT  #prints day
+    syscall
+    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
+    addi    $t0, $t0, 4
+
+    #add     $a0, $zero, $t0     #prepares print function to print month
+    #li      $v0, SYS_PRINT_INT  #prints month
+    #syscall
+    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
+    #addi    $t0, $t0, 4
+
+    #add     $a0, $zero, $t0      #prepares print function to print year
+    #li      $v0, SYS_PRINT_INT   #prints year
+    #syscall
+    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
+    #addi    $t0, $t0, 4
+
+    #add     $a0, $zero, $t0      #prepares print function to print name
+    #li      $v0, SYS_PRINT_STRING #prints name
+    #syscall
+    #sll     $t0, $t0, 4         #shift left 4 byte (2^4 = 16 bits)
+    #addi    $t0, $t0, 16
+
+    #add     $f12, $zero, $t0     #prepares print function to print kilometer
+    #li      $v0, SYS_PRINT_FLOAT #prints kilometer
+    #syscall
+    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
+    #addi    $t0, $t0, 4
+
+    #add     $f12, $zero, $t0      #prepares print function to print consumption
+    #li      $v0, SYS_PRINT_FLOAT #prints consumption
+    #syscall
+    #sll     $t0, $t0, 2          #shift left 1 byte (2^2 = 4 bits)
+    #addi    $t0, $t0, 4
+
+    #add     $f12, $zero, $t0      #prepares print function to print price
+    #li      $v0, SYS_PRINT_FLOAT #prints price
+    #syscall
+    #sll     $t0, $t0, 2          #shift left 1 byte (2^2 = 4 bits)
+    #addi    $t0, $t0, 4
+
+    addi    $t1, $t1, -1
+    addi    $t0, $t0, 4          #goes to the 40th position
+
+    j       startLoop
+
+endLoop:
+    jr      menu
 
 consumption:
-    li $v0, 4
-    la $a0, actionMessage_consumption
-    j menu
+    li      $v0, 4
+    la      $a0, actionMessage_consumption
+    j       menu
 
 
 price:
-    li $v0, 4
-    la $a0, actionMessage_price
-    j menu
+    li      $v0, 4
+    la      $a0, actionMessage_price
+    j       menu
 
 
 ranking:
-    li $v0, 4
-    la $a0, actionMessage_ranking
-    j menu
+    li      $v0, 4
+    la      $a0, actionMessage_ranking
+    j       menu
 
 
 #########################################################################
@@ -202,60 +259,60 @@ ranking:
 #########################################################################
 
 displayMessage:
-    li $v0, SYS_PRINT_STRING
+    li      $v0, SYS_PRINT_STRING
     syscall
-    jr $ra
+    jr      $ra
 
 
 readInt:
-    li $v0, SYS_READ_INT
+    li      $v0, SYS_READ_INT
     syscall
-    jr $ra
+    jr      $ra
 
 
 readFloat:
-    li $v0, SYS_READ_FLOAT
+    li      $v0, SYS_READ_FLOAT
     syscall
-    jr $ra
+    jr      $ra
 
 
 readDouble:
-    li $v0, SYS_READ_DOUBLE
+    li      $v0, SYS_READ_DOUBLE
     syscall
-    jr $ra
+    jr      $ra
 
 
 readName:
-    li $v0, SYS_READ_STRING
-    la $a0, buffer
-    li $a1, STRUCT_NAME_SIZE
-    add $v1, $a0, $zero
+    li      $v0, SYS_READ_STRING
+    la      $a0, buffer
+    li      $a1, STRUCT_NAME_SIZE
+    add     $v1, $a0, $zero
     syscall
-    jr $ra
+    jr      $ra
 
     
 loadDatabase:
     ### not working: ###
-    #la $t0, database
-    #lw $t1, 0($s7)
-    #addi $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
-    #mult $t1, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
-    #mflo $t3                            
-    #add $v0, $t0, $t3
+    #la     $t0, database
+    #lw     $t1, 0($s7)
+    #addi   $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
+    #mult   $t1, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
+    #mflo   $t3
+    #add    $v0, $t0, $t3
 
     ### this works: ###
-    la $t0, database
-    addi $t1, $zero, STRUCT_TOTAL_SIZE  #loads $t1 with STRUCT_TOTAL_SIZE
-    mult $t1, $s7                       #multiplies counter*STRUCT_TOTAL_SIZE
-    mflo $t3                            
-    add $v1, $t0, $t2
+    la      $s1, database
+    addi    $t1, $zero, STRUCT_TOTAL_SIZE  #loads $t1 with STRUCT_TOTAL_SIZE
+    mult    $t1, $s7                       #multiplies counter*STRUCT_TOTAL_SIZE
+    mflo    $t2
+    add     $s1, $s1, $t2
 
     jr $ra
 
 incrementRegister:
-    addi $s7, $s7, 1
-    jr $ra
+    addi    $s7, $s7, 1
+    jr      $ra
 
 decrementRegister:
-    addi $s7, $s7, -1
-    jr $ra
+    addi    $s7, $s7, -1
+    jr      $ra
