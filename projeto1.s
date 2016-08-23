@@ -51,11 +51,11 @@ MENU_RANKING        = 6
 #########################################################################
 
 .data
-# database
+### database ###
 database:           .space 400
 buffer:             .space STRUCT_NAME_SIZE
 
-# messages
+### messages ###
 message_menu:       .asciiz "\n Escolha qual operacao realizar: \n 1- Cadastrar abastecimento \n 2- Excluir abastecimento \n 3- Exibir abastecimentos \n 4- Exibir consumo médio \n 5- Exibir preço médio \n 6- Exibir ranking de postos\n"
 message_day:        .asciiz "\n Dia: "
 message_month:      .asciiz " Mes: "
@@ -82,7 +82,6 @@ main:
     addi $s7, $zero, 0	# Limpa o conteúdo do contador
     add $t0, $zero, $zero	# Limpa o conteúdo do t0
     add $t1, $zero, $zero	# Limpa o conteúdo do t1
-
 
 menu:
     la $a0, message_menu
@@ -162,6 +161,8 @@ store:
     jal readFloat
     sw $v0, 36($t0)
     
+    jal incrementRegister
+    
     jr menu
 
 
@@ -234,34 +235,27 @@ readName:
 
     
 loadDatabase:
-    #not working:
-
+    ### not working: ###
     #la $t0, database
     #lw $t1, 0($s7)
     #addi $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
     #mult $t1, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
-    #mflo $t3                            #
+    #mflo $t3                            
     #add $v0, $t0, $t3
 
-    #this works:
-
+    ### this works: ###
     la $t0, database
     addi $t1, $zero, STRUCT_TOTAL_SIZE  #loads $t1 with STRUCT_TOTAL_SIZE
     mult $t1, $s7                       #multiplies counter*STRUCT_TOTAL_SIZE
-    mflo $t3                            #
+    mflo $t3                            
     add $v1, $t0, $t2
 
     jr $ra
 
-#incrementRegister:
- #   lw $t0, $s7
-  #  addi $t0, $t0, 1
-   # sw $s7, $t0
-    #jr $ra
+incrementRegister:
+    addi $s7, $s7, 1
+    jr $ra
 
-
-#decrementRegister:
- #   lw $t0, $s7
-  #  addi $t0, $t0, -1
-   # sw $s7, $t0
-    #jr $ra
+decrementRegister:
+    addi $s7, $s7, -1
+    jr $ra
