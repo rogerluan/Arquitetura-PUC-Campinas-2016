@@ -53,6 +53,7 @@ MENU_RANKING        = 6
 .data
 # database
 database:           .space 400
+buffer:             .space STRUCT_NAME_SIZE
 
 # messages
 message_menu:       .asciiz "\n Escolha qual operacao realizar: \n 1- Cadastrar abastecimento \n 2- Excluir abastecimento \n 3- Exibir abastecimentos \n 4- Exibir consumo médio \n 5- Exibir preço médio \n 6- Exibir ranking de postos\n"
@@ -132,22 +133,34 @@ store:
     jal readInt
     sw  $v0, 8($t0)
 
-
     #reads name
     la $a0, message_name
     jal displayMessage
 
     jal readName
-    la $t0,
+    sw $v1,12($t0)
     
+    
+    #reads kilometer
     la $a0, message_kilometer
     jal displayMessage
     
+    jal readFloat
+    sw $v0, 28($t0)
+    
+    #reads consumption
     la $a0, message_liters
     jal displayMessage
     
+    jal readFloat
+    sw $v0, 32($t0)
+    
+    #reads price
     la $a0, message_price
     jal displayMessage
+    
+    jal readFloat
+    sw $v0, 36($t0)
     
     jr menu
 
@@ -216,6 +229,7 @@ readName:
     la $a0, buffer
     li $a1, STRUCT_NAME_SIZE
     add $v1, $a0, $zero
+    syscall
     jr $ra
 
     
@@ -238,7 +252,6 @@ loadDatabase:
     add $v1, $t0, $t2
 
     jr $ra
-
 
 #incrementRegister:
  #   lw $t0, $s7
