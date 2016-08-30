@@ -145,21 +145,21 @@ store:
     jal     displayMessage
     
     jal     readFloat
-    sw      $f0, 28($s1)
+    s.s      $f0, 28($s1)#f
     
     #reads consumption
     la      $a0, message_liters
     jal     displayMessage
     
     jal     readFloat
-    sw      $f0, 32($s1)
+    s.s      $f0, 32($s1)
 
     #reads price
     la      $a0, message_price
     jal     displayMessage
     
     jal     readFloat
-    sw      $f0, 36($s1)
+    s.s      $f0, 36($s1)
     
     jal     incrementRegister
     
@@ -176,7 +176,7 @@ delete:
 listPlaces:
 
     la      $t0, database
-    add     $t1, $s7, $zero
+    add     $t1, $s7, $zero #move the register to a safe location
     add     $t2, $t2, $zero #reset $t2
 startLoop:
     #stop condition
@@ -185,51 +185,77 @@ startLoop:
 
     #list place
     addi    $t2, $t2, 1         #adds 1 to the printed counter
-
-    add     $a0, $zero, $t0     #prepares print function to print day
+    
+    
+    lw      $t4, 0($t0)
+    add     $a0, $zero, $t4     #prepares print function to print day
+    
+    
     li      $v0, SYS_PRINT_INT  #prints day
     syscall
-    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
-    addi    $t0, $t0, 4
+    
+    #put "/"
+    add     $a0, $zero, '/'
+    li      $v0, SYS_PRINT_CHAR
+    syscall
+    
+    #show the moth
+    lw      $t4, 4($t0)         #prepares print function to print month
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_INT  #prints month
+    syscall
+    
+    #put a "/"
+    add     $a0, $zero, '/'
+    li      $v0, SYS_PRINT_CHAR
+    syscall
+    
+    #show the year
+    lw      $t4, 8($t0)         #prepares print function to print year
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_INT  #print year
+    syscall
+    
+    add     $a0, $zero, 10      #prepare the system to a new line
+    li      $v0, 11             #
+    syscall
+    
+    lw      $t4, 12($t0)        #prepare print function to print name
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_STRING#print name
+    syscall
+    
+    
+    l.s      $f12, 28($t0)      #prepare to print a float(kilometer)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT#print kilometer
+    syscall
+    
+     add     $a0, $zero, 10      #prepare the system to a new line
+    li      $v0, 11             #
+    syscall
+    
+     l.s      $f12, 32($t0)      #prepare to print a float(Quantidade)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT#print Quantidade
+    syscall
+    
+     add     $a0, $zero, 10      #prepare the system to a new line
+    li      $v0, 11             #
+    syscall
+    
+     l.s      $f12, 36($t0)      #prepare to print a float(preço)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT#print preço
+    syscall
+    
+     add     $a0, $zero, 10      #prepare the system to a new line
+    li      $v0, 11             #
+    syscall
 
-    #add     $a0, $zero, $t0     #prepares print function to print month
-    #li      $v0, SYS_PRINT_INT  #prints month
-    #syscall
-    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
-
-    #add     $a0, $zero, $t0      #prepares print function to print year
-    #li      $v0, SYS_PRINT_INT   #prints year
-    #syscall
-    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
-
-    #add     $a0, $zero, $t0      #prepares print function to print name
-    #li      $v0, SYS_PRINT_STRING #prints name
-    #syscall
-    #sll     $t0, $t0, 4         #shift left 4 byte (2^4 = 16 bits)
-    #addi    $t0, $t0, 16
-
-    #add     $f12, $zero, $t0     #prepares print function to print kilometer
-    #li      $v0, SYS_PRINT_FLOAT #prints kilometer
-    #syscall
-    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
-
-    #add     $f12, $zero, $t0      #prepares print function to print consumption
-    #li      $v0, SYS_PRINT_FLOAT #prints consumption
-    #syscall
-    #sll     $t0, $t0, 2          #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
-
-    #add     $f12, $zero, $t0      #prepares print function to print price
-    #li      $v0, SYS_PRINT_FLOAT #prints price
-    #syscall
-    #sll     $t0, $t0, 2          #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
 
     addi    $t1, $t1, -1
-    addi    $t0, $t0, 4          #goes to the 40th position
+    addi    $t0, $t0, 40          #goes to the 40th position
 
     j       startLoop
 
