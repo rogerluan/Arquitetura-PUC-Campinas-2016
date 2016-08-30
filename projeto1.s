@@ -69,7 +69,7 @@ message_invalid:    .asciiz "\n Valor invalido"
 message_option:     .asciiz "\n Opcao: "
 
 actionMessage_store:        .asciiz "\n Armazenar"
-actionMessage_delete:       .asciiz "\n Excluir"
+actionMessage_delete:       .asciiz "\n Digite a data a ser excluida:"
 actionMessage_display:      .asciiz "\n Exibir"
 actionMessage_consumption:  .asciiz "\n Consumo"
 actionMessage_price:        .asciiz "\n Preco"
@@ -137,7 +137,7 @@ store:
     jal     displayMessage
 
     jal     readName
-    sw      $v1, 12($s1)
+    #sw      $v1, 12($s1)
     
     
     #reads kilometer
@@ -167,8 +167,8 @@ store:
 
 
 delete:
-    li      $v0, 4
-    la      $a0, actionMessage_delete
+    
+    #
     j       menu
     #shift left 40 bits para excluir
 
@@ -220,33 +220,32 @@ startLoop:
     li      $v0, 11             #
     syscall
     
-    lw      $t4, 12($t0)        #prepare print function to print name
+    la      $a0, 12($t0)            #prepare print function to print name
+    li      $v0, SYS_PRINT_STRING   #print name
+    syscall
+    
+    
+    l.s      $f12, 28($t0)          #prepare to print a float(kilometer)
     add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_STRING#print name
+    li      $v0, SYS_PRINT_FLOAT    #print kilometer
     syscall
     
+     add     $a0, $zero, 10         #prepare the system to a new line
+    li      $v0, 11             
+    syscall
     
-    l.s      $f12, 28($t0)      #prepare to print a float(kilometer)
+     l.s      $f12, 32($t0)         #prepare to print a float(Quantidade)
     add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_FLOAT#print kilometer
+    li      $v0, SYS_PRINT_FLOAT    #print Quantidade
     syscall
     
-     add     $a0, $zero, 10      #prepare the system to a new line
-    li      $v0, 11             #
+     add     $a0, $zero, 10         #prepare the system to a new line
+    li      $v0, 11             
     syscall
     
-     l.s      $f12, 32($t0)      #prepare to print a float(Quantidade)
+     l.s      $f12, 36($t0)          #prepare to print a float(preço)
     add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_FLOAT#print Quantidade
-    syscall
-    
-     add     $a0, $zero, 10      #prepare the system to a new line
-    li      $v0, 11             #
-    syscall
-    
-     l.s      $f12, 36($t0)      #prepare to print a float(preço)
-    add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_FLOAT#print preço
+    li      $v0, SYS_PRINT_FLOAT    #print preço
     syscall
     
      add     $a0, $zero, 10      #prepare the system to a new line
@@ -310,9 +309,8 @@ readDouble:
 
 readName:
     li      $v0, SYS_READ_STRING
-    la      $a0, buffer
+    la      $a0, 12($s1)
     li      $a1, STRUCT_NAME_SIZE
-    add     $v1, $a0, $zero
     syscall
     jr      $ra
 
