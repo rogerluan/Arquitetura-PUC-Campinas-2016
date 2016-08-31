@@ -224,42 +224,8 @@ MothOk:
     
 DayOk:
     #the date was found
-    #move day
-    lw      $t5, 40($t0)
-    sw      $t5, 0($t0)
     
-    #move moth
-    lw      $t5, 44($t0)
-    sw      $t5, 4($t0)
-    
-    #move year
-    lw      $t5, 48($t0)
-    sw      $t5, 8($t0)
-    
-    #move name
-    lw      $t5, 52($t0)
-    sw      $t5, 12($t0)
-    lw      $t5, 56($t0)
-    sw      $t5, 16($t0)
-    lw      $t5, 60($t0)
-    sw      $t5, 20($t0)
-    lw      $t5, 64($t0)
-    sw      $t5, 24($t0)
-    
-    #move kilometer
-    l.s     $f5, 68($t0)
-    s.s     $f5, 28($t0)
-    
-    #move Quantidade
-    l.s     $f5, 72($t0)
-    s.s     $f5, 32($t0)
-    
-    #move price
-    l.s     $f5, 76($t0)
-    s.s     $f5, 36($t0)
-
-    
-    
+    jal     DeleteFunction
     addi    $t4, $t4, -1
     addi    $t0, $t0, 40
     bne     $t4, $zero, DayOk
@@ -287,74 +253,7 @@ startLoop:
     slti    $t3, $t1, 1
     bne     $t3, $zero, endLoop #if counter < 1, exit
 
-    #list place
-    addi    $t2, $t2, 1         #adds 1 to the printed counter
-    
-    
-    lw      $t4, 0($t0)
-    add     $a0, $zero, $t4     #prepares print function to print day
-    
-    
-    li      $v0, SYS_PRINT_INT  #prints day
-    syscall
-    
-    #put "/"
-    add     $a0, $zero, '/'
-    li      $v0, SYS_PRINT_CHAR
-    syscall
-    
-    #show the moth
-    lw      $t4, 4($t0)         #prepares print function to print month
-    add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_INT  #prints month
-    syscall
-    
-    #put a "/"
-    add     $a0, $zero, '/'
-    li      $v0, SYS_PRINT_CHAR
-    syscall
-    
-    #show the year
-    lw      $t4, 8($t0)         #prepares print function to print year
-    add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_INT  #print year
-    syscall
-    
-    add     $a0, $zero, 10      #prepare the system to a new line
-    li      $v0, 11             #
-    syscall
-    
-    la      $a0, 12($t0)            #prepare print function to print name
-    li      $v0, SYS_PRINT_STRING   #print name
-    syscall
-    
-    
-    l.s      $f12, 28($t0)          #prepare to print a float(kilometer)
-    add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_FLOAT    #print kilometer
-    syscall
-    
-     add     $a0, $zero, 10         #prepare the system to a new line
-    li      $v0, 11             
-    syscall
-    
-     l.s      $f12, 32($t0)         #prepare to print a float(Quantidade)
-    add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_FLOAT    #print Quantidade
-    syscall
-    
-     add     $a0, $zero, 10         #prepare the system to a new line
-    li      $v0, 11             
-    syscall
-    
-     l.s      $f12, 36($t0)          #prepare to print a float(preço)
-    add     $a0, $zero, $t4
-    li      $v0, SYS_PRINT_FLOAT    #print preço
-    syscall
-    
-     add     $a0, $zero, 10      #prepare the system to a new line
-    li      $v0, 11             #
-    syscall
+    jal     ListFunction
 
 
     addi    $t1, $t1, -1
@@ -443,4 +342,111 @@ incrementRegister:
 
 decrementRegister:
     addi    $s7, $s7, -1
+    jr      $ra
+    
+DeleteFunction:
+    #move day
+    lw      $t5, 40($t0)
+    sw      $t5, 0($t0)
+    
+    #move moth
+    lw      $t5, 44($t0)
+    sw      $t5, 4($t0)
+    
+    #move year
+    lw      $t5, 48($t0)
+    sw      $t5, 8($t0)
+    
+    #move name
+    lw      $t5, 52($t0)
+    sw      $t5, 12($t0)
+    lw      $t5, 56($t0)
+    sw      $t5, 16($t0)
+    lw      $t5, 60($t0)
+    sw      $t5, 20($t0)
+    lw      $t5, 64($t0)
+    sw      $t5, 24($t0)
+    
+    #move kilometer
+    l.s     $f5, 68($t0)
+    s.s     $f5, 28($t0)
+    
+    #move Quantidade
+    l.s     $f5, 72($t0)
+    s.s     $f5, 32($t0)
+    
+    #move price
+    l.s     $f5, 76($t0)
+    s.s     $f5, 36($t0)
+    jr      $ra
+    
+ListFunction:
+    #list place
+    addi    $t2, $t2, 1         #adds 1 to the printed counter
+    
+    
+    lw      $t4, 0($t0)
+    add     $a0, $zero, $t4     #prepares print function to print day
+    
+    
+    li      $v0, SYS_PRINT_INT  #prints day
+    syscall
+    
+    #put "/"
+    add     $a0, $zero, '/'
+    li      $v0, SYS_PRINT_CHAR
+    syscall
+    
+    #show the moth
+    lw      $t4, 4($t0)         #prepares print function to print month
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_INT  #prints month
+    syscall
+    
+    #put a "/"
+    add     $a0, $zero, '/'
+    li      $v0, SYS_PRINT_CHAR
+    syscall
+    
+    #show the year
+    lw      $t4, 8($t0)             #prepares print function to print year
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_INT      #print year
+    syscall
+    
+    add     $a0, $zero, 10          #prepare the system to a new line
+    li      $v0, 11             
+    syscall
+    
+    la      $a0, 12($t0)            #prepare print function to print name
+    li      $v0, SYS_PRINT_STRING   #print name
+    syscall
+    
+    
+    l.s      $f12, 28($t0)          #prepare to print a float(kilometer)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT    #print kilometer
+    syscall
+    
+     add     $a0, $zero, 10         #prepare the system to a new line
+    li      $v0, 11             
+    syscall
+    
+    l.s      $f12, 32($t0)          #prepare to print a float(Quantidade)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT    #print Quantidade
+    syscall
+    
+     add     $a0, $zero, 10         #prepare the system to a new line
+    li      $v0, 11             
+    syscall
+    
+    l.s      $f12, 36($t0)          #prepare to print a float(preço)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT    #print preço
+    syscall
+    
+    add     $a0, $zero, 10          #prepare the system to a new line
+    li      $v0, 11             
+    syscall
     jr      $ra
