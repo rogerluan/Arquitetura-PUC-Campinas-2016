@@ -184,7 +184,7 @@ delete:
     la      $a0, message_month
     syscall
     
-    #get moth
+    #get month
     jal     readInt
     add      $t2, $v0, $zero
     
@@ -210,12 +210,12 @@ DeleteLoop:
     
 YearOk:
     lw      $t5, 4($t0)
-    beq     $t2, $t5, MothOk
+    beq     $t2, $t5, MonthOk
     addi    $t0, $t0, 40
     addi    $t4, $t4, -1
     j       DeleteLoop
     
-MothOk:
+MonthOk:
     lw      $t5, 0($t0)
     beq     $t1, $t5, DayOk
     addi    $t0, $t0, 40
@@ -265,8 +265,7 @@ endLoop:
     jr      menu
 
 consumption:
-    li      $v0, 4
-    la      $a0, actionMessage_consumption
+   
     j       menu
 
 
@@ -349,7 +348,7 @@ DeleteFunction:
     lw      $t5, 40($t0)
     sw      $t5, 0($t0)
     
-    #move moth
+    #move month
     lw      $t5, 44($t0)
     sw      $t5, 4($t0)
     
@@ -397,7 +396,7 @@ ListFunction:
     li      $v0, SYS_PRINT_CHAR
     syscall
     
-    #show the moth
+# # #     #show the month
     lw      $t4, 4($t0)         #prepares print function to print month
     add     $a0, $zero, $t4
     li      $v0, SYS_PRINT_INT  #prints month
@@ -418,11 +417,12 @@ ListFunction:
     li      $v0, 11             
     syscall
     
+    #show name
     la      $a0, 12($t0)            #prepare print function to print name
     li      $v0, SYS_PRINT_STRING   #print name
     syscall
     
-    
+    #show kilometer
     l.s      $f12, 28($t0)          #prepare to print a float(kilometer)
     add     $a0, $zero, $t4
     li      $v0, SYS_PRINT_FLOAT    #print kilometer
@@ -432,6 +432,7 @@ ListFunction:
     li      $v0, 11             
     syscall
     
+    #show Quantidade
     l.s      $f12, 32($t0)          #prepare to print a float(Quantidade)
     add     $a0, $zero, $t4
     li      $v0, SYS_PRINT_FLOAT    #print Quantidade
@@ -441,6 +442,7 @@ ListFunction:
     li      $v0, 11             
     syscall
     
+    #show Preco
     l.s      $f12, 36($t0)          #prepare to print a float(preço)
     add     $a0, $zero, $t4
     li      $v0, SYS_PRINT_FLOAT    #print preço
