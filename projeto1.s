@@ -167,8 +167,112 @@ store:
 
 
 delete:
+    #Delete information
+    li      $v0, 4
+    la      $a0, actionMessage_delete
+    syscall
     
-    #
+    li      $v0, 4
+    la      $a0, message_day
+    syscall
+    
+    #get day 
+    jal     readInt
+    add      $t1, $v0, $zero
+    
+    li      $v0, 4
+    la      $a0, message_month
+    syscall
+    
+    #get moth
+    jal     readInt
+    add      $t2, $v0, $zero
+    
+    li      $v0, 4
+    la      $a0, message_year
+    syscall
+    
+    #get year
+    jal     readInt
+    add      $t3, $v0, $zero
+    
+    la      $t0, database       #load database
+    add     $t4, $s7, $zero     #get register
+DeleteLoop:
+    slti    $t5, $t4, 1
+    bne     $t5, $zero, DeleteEnd
+    
+    lw      $t5, 8($t0)
+    beq     $t3, $t5, YearOk
+    addi     $t0, $t0, 40
+    addi     $t4, $t4, -1
+    j       DeleteLoop
+    
+YearOk:
+    lw      $t5, 4($t0)
+    beq     $t2, $t5, MothOk
+    addi    $t0, $t0, 40
+    addi    $t4, $t4, -1
+    j       DeleteLoop
+    
+MothOk:
+    lw      $t5, 0($t0)
+    beq     $t1, $t5, DayOk
+    addi    $t0, $t0, 40
+    addi    $t4, $t4, -1
+    j       DeleteLoop
+    
+DayOk:
+    #the date was found
+    #move day
+    lw      $t5, 40($t0)
+    sw      $t5, 0($t0)
+    
+    #move moth
+    lw      $t5, 44($t0)
+    sw      $t5, 4($t0)
+    
+    #move year
+    lw      $t5, 48($t0)
+    sw      $t5, 8($t0)
+    
+    #move name
+    lw      $t5, 52($t0)
+    sw      $t5, 12($t0)
+    lw      $t5, 56($t0)
+    sw      $t5, 16($t0)
+    lw      $t5, 60($t0)
+    sw      $t5, 20($t0)
+    lw      $t5, 64($t0)
+    sw      $t5, 24($t0)
+    
+    #move kilometer
+    l.s     $f5, 68($t0)
+    s.s     $f5, 28($t0)
+    
+    #move Quantidade
+    l.s     $f5, 72($t0)
+    s.s     $f5, 32($t0)
+    
+    #move price
+    l.s     $f5, 76($t0)
+    s.s     $f5, 36($t0)
+
+    
+    
+    addi    $t4, $t4, -1
+    addi    $t0, $t0, 40
+    bne     $t4, $zero, DayOk
+    addi    $t5, $zero, 0
+    
+    
+DeleteEnd:
+
+    bne     $t5, 0, NotDone
+    addi    $s7, $s7, -1
+    
+NotDone:
+    
     j       menu
     #shift left 40 bits para excluir
 
