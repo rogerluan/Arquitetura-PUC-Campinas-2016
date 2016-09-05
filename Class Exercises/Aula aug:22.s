@@ -37,3 +37,7 @@ L1: addi $a0, $a0, -1   # else decrement n
     addi $sp, $sp, 8    # pop 2 items from stack
     mul  $v0, $a0, $v0  # multiply to get result
     jr   $ra            # and return
+
+
+
+    
