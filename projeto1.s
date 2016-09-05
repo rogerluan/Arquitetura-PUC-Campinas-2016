@@ -69,7 +69,7 @@ message_invalid:    .asciiz "\n Valor invalido"
 message_option:     .asciiz "\n Opcao: "
 
 actionMessage_store:        .asciiz "\n Armazenar"
-actionMessage_delete:       .asciiz "\n Excluir"
+actionMessage_delete:       .asciiz "\n Digite a data a ser excluida:"
 actionMessage_display:      .asciiz "\n Exibir"
 actionMessage_consumption:  .asciiz "\n Consumo"
 actionMessage_price:        .asciiz "\n Preco"
@@ -137,7 +137,7 @@ store:
     jal     displayMessage
 
     jal     readName
-    sw      $v1, 12($s1)
+    #sw      $v1, 12($s1)
     
     
     #reads kilometer
@@ -145,21 +145,21 @@ store:
     jal     displayMessage
     
     jal     readFloat
-    sw      $f0, 28($s1)
+    s.s      $f0, 28($s1)#f
     
     #reads consumption
     la      $a0, message_liters
     jal     displayMessage
     
     jal     readFloat
-    sw      $f0, 32($s1)
+    s.s      $f0, 32($s1)
 
     #reads price
     la      $a0, message_price
     jal     displayMessage
     
     jal     readFloat
-    sw      $f0, 36($s1)
+    s.s      $f0, 36($s1)
     
     jal     incrementRegister
     
@@ -167,8 +167,78 @@ store:
 
 
 delete:
+    #Delete information
     li      $v0, 4
     la      $a0, actionMessage_delete
+    syscall
+    
+    li      $v0, 4
+    la      $a0, message_day
+    syscall
+    
+    #get day 
+    jal     readInt
+    add      $t1, $v0, $zero
+    
+    li      $v0, 4
+    la      $a0, message_month
+    syscall
+    
+    #get month
+    jal     readInt
+    add      $t2, $v0, $zero
+    
+    li      $v0, 4
+    la      $a0, message_year
+    syscall
+    
+    #get year
+    jal     readInt
+    add      $t3, $v0, $zero
+    
+    la      $t0, database       #load database
+    add     $t4, $s7, $zero     #get register
+DeleteLoop:
+    slti    $t5, $t4, 1
+    bne     $t5, $zero, DeleteEnd
+    
+    lw      $t5, 8($t0)
+    beq     $t3, $t5, YearOk
+    addi     $t0, $t0, 40
+    addi     $t4, $t4, -1
+    j       DeleteLoop
+    
+YearOk:
+    lw      $t5, 4($t0)
+    beq     $t2, $t5, MonthOk
+    addi    $t0, $t0, 40
+    addi    $t4, $t4, -1
+    j       DeleteLoop
+    
+MonthOk:
+    lw      $t5, 0($t0)
+    beq     $t1, $t5, DayOk
+    addi    $t0, $t0, 40
+    addi    $t4, $t4, -1
+    j       DeleteLoop
+    
+DayOk:
+    #the date was found
+    
+    jal     DeleteFunction
+    addi    $t4, $t4, -1
+    addi    $t0, $t0, 40
+    bne     $t4, $zero, DayOk
+    addi    $t5, $zero, 0
+    
+    
+DeleteEnd:
+
+    bne     $t5, 0, NotDone
+    addi    $s7, $s7, -1
+    
+NotDone:
+    
     j       menu
     #shift left 40 bits para excluir
 
@@ -176,60 +246,18 @@ delete:
 listPlaces:
 
     la      $t0, database
-    add     $t1, $s7, $zero
+    add     $t1, $s7, $zero #move the register to a safe location
     add     $t2, $t2, $zero #reset $t2
 startLoop:
     #stop condition
     slti    $t3, $t1, 1
     bne     $t3, $zero, endLoop #if counter < 1, exit
 
-    #list place
-    addi    $t2, $t2, 1         #adds 1 to the printed counter
+    jal     ListFunction
 
-    add     $a0, $zero, $t0     #prepares print function to print day
-    li      $v0, SYS_PRINT_INT  #prints day
-    syscall
-    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
-    addi    $t0, $t0, 4
-
-    #add     $a0, $zero, $t0     #prepares print function to print month
-    #li      $v0, SYS_PRINT_INT  #prints month
-    #syscall
-    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
-
-    #add     $a0, $zero, $t0      #prepares print function to print year
-    #li      $v0, SYS_PRINT_INT   #prints year
-    #syscall
-    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
-
-    #add     $a0, $zero, $t0      #prepares print function to print name
-    #li      $v0, SYS_PRINT_STRING #prints name
-    #syscall
-    #sll     $t0, $t0, 4         #shift left 4 byte (2^4 = 16 bits)
-    #addi    $t0, $t0, 16
-
-    #add     $f12, $zero, $t0     #prepares print function to print kilometer
-    #li      $v0, SYS_PRINT_FLOAT #prints kilometer
-    #syscall
-    #sll     $t0, $t0, 2         #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
-
-    #add     $f12, $zero, $t0      #prepares print function to print consumption
-    #li      $v0, SYS_PRINT_FLOAT #prints consumption
-    #syscall
-    #sll     $t0, $t0, 2          #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
-
-    #add     $f12, $zero, $t0      #prepares print function to print price
-    #li      $v0, SYS_PRINT_FLOAT #prints price
-    #syscall
-    #sll     $t0, $t0, 2          #shift left 1 byte (2^2 = 4 bits)
-    #addi    $t0, $t0, 4
 
     addi    $t1, $t1, -1
-    addi    $t0, $t0, 4          #goes to the 40th position
+    addi    $t0, $t0, 40          #goes to the 40th position
 
     j       startLoop
 
@@ -237,8 +265,7 @@ endLoop:
     jr      menu
 
 consumption:
-    li      $v0, 4
-    la      $a0, actionMessage_consumption
+   
     j       menu
 
 
@@ -284,9 +311,8 @@ readDouble:
 
 readName:
     li      $v0, SYS_READ_STRING
-    la      $a0, buffer
+    la      $a0, 12($s1)
     li      $a1, STRUCT_NAME_SIZE
-    add     $v1, $a0, $zero
     syscall
     jr      $ra
 
@@ -315,4 +341,114 @@ incrementRegister:
 
 decrementRegister:
     addi    $s7, $s7, -1
+    jr      $ra
+    
+DeleteFunction:
+    #move day
+    lw      $t5, 40($t0)
+    sw      $t5, 0($t0)
+    
+    #move month
+    lw      $t5, 44($t0)
+    sw      $t5, 4($t0)
+    
+    #move year
+    lw      $t5, 48($t0)
+    sw      $t5, 8($t0)
+    
+    #move name
+    lw      $t5, 52($t0)
+    sw      $t5, 12($t0)
+    lw      $t5, 56($t0)
+    sw      $t5, 16($t0)
+    lw      $t5, 60($t0)
+    sw      $t5, 20($t0)
+    lw      $t5, 64($t0)
+    sw      $t5, 24($t0)
+    
+    #move kilometer
+    l.s     $f5, 68($t0)
+    s.s     $f5, 28($t0)
+    
+    #move Quantidade
+    l.s     $f5, 72($t0)
+    s.s     $f5, 32($t0)
+    
+    #move price
+    l.s     $f5, 76($t0)
+    s.s     $f5, 36($t0)
+    jr      $ra
+    
+ListFunction:
+    #list place
+    addi    $t2, $t2, 1         #adds 1 to the printed counter
+    
+    
+    lw      $t4, 0($t0)
+    add     $a0, $zero, $t4     #prepares print function to print day
+    
+    
+    li      $v0, SYS_PRINT_INT  #prints day
+    syscall
+    
+    #put "/"
+    add     $a0, $zero, '/'
+    li      $v0, SYS_PRINT_CHAR
+    syscall
+    
+# # #     #show the month
+    lw      $t4, 4($t0)         #prepares print function to print month
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_INT  #prints month
+    syscall
+    
+    #put a "/"
+    add     $a0, $zero, '/'
+    li      $v0, SYS_PRINT_CHAR
+    syscall
+    
+    #show the year
+    lw      $t4, 8($t0)             #prepares print function to print year
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_INT      #print year
+    syscall
+    
+    add     $a0, $zero, 10          #prepare the system to a new line
+    li      $v0, 11             
+    syscall
+    
+    #show name
+    la      $a0, 12($t0)            #prepare print function to print name
+    li      $v0, SYS_PRINT_STRING   #print name
+    syscall
+    
+    #show kilometer
+    l.s      $f12, 28($t0)          #prepare to print a float(kilometer)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT    #print kilometer
+    syscall
+    
+     add     $a0, $zero, 10         #prepare the system to a new line
+    li      $v0, 11             
+    syscall
+    
+    #show Quantidade
+    l.s      $f12, 32($t0)          #prepare to print a float(Quantidade)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT    #print Quantidade
+    syscall
+    
+     add     $a0, $zero, 10         #prepare the system to a new line
+    li      $v0, 11             
+    syscall
+    
+    #show Preco
+    l.s      $f12, 36($t0)          #prepare to print a float(preço)
+    add     $a0, $zero, $t4
+    li      $v0, SYS_PRINT_FLOAT    #print preço
+    syscall
+    
+    add     $a0, $zero, 10          #prepare the system to a new line
+    li      $v0, 11             
+    syscall
     jr      $ra
