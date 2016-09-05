@@ -28,7 +28,7 @@ SYS_READ_CHAR       = 12
 #   Program defined constants
 #########################################################################
 
-STRUCT_TOTAL_SIZE   = 40
+STRUCT_TOTAL_SIZE   = 52
 STRUCT_NAME_SIZE    = 16
 
 INT_SIZE            = 4
@@ -56,7 +56,7 @@ MENU_RANKING        = 6
 
 .data
 ### database ###
-database:           .space 400
+database:           .space 520
 buffer:             .space STRUCT_NAME_SIZE
 
 ### messages ###
@@ -64,16 +64,16 @@ message_menu:       .asciiz "\n Escolha qual operacao realizar: \n 1- Cadastrar 
 message_day:        .asciiz "\n Dia: "
 message_month:      .asciiz " Mes: "
 message_year:       .asciiz " Ano: "
-message_name:       .asciiz "\n Nome: "
-message_kilometer:  .asciiz "\n Quilometragem: "
-message_liters:     .asciiz "\n Quantidade: "
-message_price:      .asciiz "\n Preco: "
+message_name:       .asciiz "\n Nome do posto: "
+message_kilometer:  .asciiz "\n Quilometragem total do carro: "
+message_liters:     .asciiz "\n Quantidade de litros abastecidos: "
+message_price:      .asciiz "\n Preco por litro do combustivel: "
 message_invalid:    .asciiz "\n Valor invalido"
 
 message_option:     .asciiz "\n Opcao: "
 
-actionMessage_store:        .asciiz "\n Armazenar"
-actionMessage_delete:       .asciiz "\n Digite a data a ser excluida:"
+actionMessage_store:        .asciiz "\n Cadastro de novo abastecimento!"
+actionMessage_delete:       .asciiz "\n Digite a data do abastecimento a ser excluido:"
 actionMessage_display:      .asciiz "\n Exibir"
 actionMessage_consumption:  .asciiz "\n Consumo"
 actionMessage_price:        .asciiz "\n Preco"
@@ -163,14 +163,14 @@ store:
     jal     displayMessage
     
     jal     readFloat
-    s.s     $f0, 32($s1)
+    s.s     $f0, LITERS_POSITION($s1)
 
     #reads price
     la      $a0, message_price
     jal     displayMessage
     
     jal     readFloat
-    s.s     $f0, 36($s1)
+    s.s     $f0, PRICE_POSITION($s1)
     
     jal     incrementRegister
     
@@ -315,51 +315,51 @@ endLoop:
 
 ListFunction:
     #push
-    addi    $sp, $sp, -4        #adjust stack for 1 item
-    sw      $ra, 0($sp)         #save return address
+    addi    $sp, $sp, -4                #adjust stack for 1 item
+    sw      $ra, 0($sp)                 #save return address
 
     #list place
-    addi    $t2, $t2, 1         #adds 1 to the printed counter
+    addi    $t2, $t2, 1                 #adds 1 to the printed counter
 
     #prints day
-    lw      $t4, 0($t0)
-    add     $a0, $zero, $t4     #prepares print function to print day
+    lw      $t4, DAY_POSITION($t0)      #prepares print function to print day
+    add     $a0, $zero, $t4
     jal     displayInt
     jal     displaySlash
 
     #prints month
-    lw      $t4, 4($t0)         #prepares print function to print month
+    lw      $t4, MONTH_POSITION($t0)    #prepares print function to print month
     add     $a0, $zero, $t4
     jal     displayInt
     jal     displaySlash
     
     #prints year
-    lw      $t4, 8($t0)         #prepares print function to print year
+    lw      $t4, YEAR_POSITION($t0)     #prepares print function to print year
     add     $a0, $zero, $t4
     jal     displayInt
     jal     displayNewLine
     
     #prints name
-    la      $a0, 12($t0)        #prepare print function to print name
-    jal     displayMessage      #print name
+    la      $a0, NAME_POSITION($t0)     #prepare print function to print name
+    jal     displayMessage              #print name
     
     #prints kilometer
-    l.s     $f12, 28($t0)       #prepare to print a float(kilometer)
-    jal     displayFloat        #print kilometer
+    l.s     $f12, KILOMETER_POSITION($t0)#prepare to print a float(kilometer)
+    jal     displayFloat                #print kilometer
     jal     displayNewLine
     
     #prints fuel quantity
-    l.s     $f12, 32($t0)       #prepare to print a float(fuel quantity)
-    jal     displayFloat        #print fuel quantity
+    l.s     $f12, LITERS_POSITION($t0)  #prepare to print a float(fuel quantity)
+    jal     displayFloat                #print fuel quantity
     jal     displayNewLine
     
     #prints price
-    l.s     $f12, 36($t0)       #prepare to print a float(price)
-    jal     displayFloat        #print price
+    l.s     $f12, PRICE_POSITION($t0)   #prepare to print a float(price)
+    jal     displayFloat                #print price
     jal     displayNewLine
 
     #pop
-    lw      $ra, 0($sp)         #restore return address
+    lw      $ra, 0($sp)                 #restore return address
     addi    $sp, $sp, 4
     jr      $ra
 
@@ -376,8 +376,8 @@ ConsumoLoop:
     slti    $t3, $t1, 1                 #check if counter < 1
     bne     $t3, $zero, ConsumoEnd      #if so, end loop
     
-    l.s     $f2, 28($t0)                #store the kilometer of this position
-    l.s     $f4, 32($t0)                #store the fuel quantity of this position
+    l.s     $f2, KILOMETER_POSITION($t0)#store the kilometer of this position
+    l.s     $f4, LITERS_POSITION($t0)   #store the fuel quantity of this position
     
     div.s   $f12, $f2, $f4
     jal     displayFloat
@@ -411,7 +411,7 @@ PriceLoop:
     slti    $t3, $t1, 1
     bne     $t3, $zero, PriceEnd
     
-    l.s     $f1, 36($t0)                #get the price in the register
+    l.s     $f1, PRICE_POSITION($t0)    #get the price in the register
     
     add.s   $f12, $f12, $f1             #add price with the others
     
