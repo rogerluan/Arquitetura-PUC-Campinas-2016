@@ -28,7 +28,7 @@ SYS_READ_CHAR       = 12
 #   Program defined constants
 #########################################################################
 
-STRUCT_TOTAL_SIZE   = 52
+STRUCT_TOTAL_SIZE   = 40
 STRUCT_NAME_SIZE    = 16
 
 DAY_POSITION        = 0
@@ -36,8 +36,8 @@ MONTH_POSITION      = 4
 YEAR_POSITION       = 8
 NAME_POSITION       = 12
 KILOMETER_POSITION  = 28
-LITERS_POSITION     = 36
-PRICE_POSITION      = 44
+LITERS_POSITION     = 32
+PRICE_POSITION      = 36
 
 MENU_STORE          = 1
 MENU_DELETE         = 2
@@ -53,7 +53,7 @@ MENU_RANKING        = 6
 
 .data
 ### database ###
-database:           .space 520
+database:           .space 400
 buffer:             .space STRUCT_NAME_SIZE
 
 ### messages ###
@@ -257,37 +257,37 @@ NotDone:
 
 DeleteFunction:
     #move day
-    lw      $t5, 52($t0)        # DAY_POSITION + STRUCT_TOTAL_SIZE
+    lw      $t5, 40($t0)        # DAY_POSITION + STRUCT_TOTAL_SIZE
     sw      $t5, DAY_POSITION($t0)
     
     #move month
-    lw      $t5, 56($t0)        # MONTH_POSITION + STRUCT_TOTAL_SIZE
+    lw      $t5, 44($t0)        # MONTH_POSITION + STRUCT_TOTAL_SIZE
     sw      $t5, MONTH_POSITION($t0)
     
     #move year
-    lw      $t5, 60($t0)        # YEAR_POSITION + STRUCT_TOTAL_SIZE
+    lw      $t5, 48($t0)        # YEAR_POSITION + STRUCT_TOTAL_SIZE
     sw      $t5, YEAR_POSITION($t0)
     
     #move name
-    lw      $t5, 64($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE
+    lw      $t5, 52($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE
     sw      $t5, NAME_POSITION($t0)
-    lw      $t5, 68($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 4 (1 word)
+    lw      $t5, 56($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 4 (1 word)
     sw      $t5, 16($t0)        # NAME_POSITION + 4 (1 word)
-    lw      $t5, 72($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 8 (2 words)
+    lw      $t5, 60($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 8 (2 words)
     sw      $t5, 20($t0)        # NAME_POSITION + 8 (2 words)
-    lw      $t5, 76($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 12 (3 words)
+    lw      $t5, 64($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 12 (3 words)
     sw      $t5, 24($t0)        # NAME_POSITION + 12 (3 words)
     
     #move kilometer
-    l.s     $f5, 80($t0)        # KILOMETER_POSITION + STRUCT_TOTAL_SIZE
+    l.s     $f5, 68($t0)        # KILOMETER_POSITION + STRUCT_TOTAL_SIZE
     s.s     $f5, KILOMETER_POSITION($t0)
     
     #move fuel quantity
-    l.s     $f5, 88($t0)        # LITERS_POSITION + STRUCT_TOTAL_SIZE
+    l.s     $f5, 72($t0)        # LITERS_POSITION + STRUCT_TOTAL_SIZE
     s.s     $f5, LITERS_POSITION($t0)
     
     #move price
-    l.s     $f5, 96($t0)        # PRICE_POSITION + STRUCT_TOTAL_SIZE
+    l.s     $f5, 76($t0)        # PRICE_POSITION + STRUCT_TOTAL_SIZE
     s.s     $f5, PRICE_POSITION($t0)
     jr      $ra
 
@@ -540,14 +540,6 @@ readName:
 
     
 loadDatabase:
-    ### not working: ###    revise!
-    #la     $t0, database
-    #lw     $t1, 0($s7)
-    #addi   $t2, $zero, STRUCT_TOTAL_SIZE  #loads $t2 with STRUCT_TOTAL_SIZE
-    #mult   $t1, $t2                       #multiplies counter*STRUCT_TOTAL_SIZE
-    #mflo   $t3
-    #add    $v0, $t0, $t3
-
     ### this works: ###
     la      $s1, database
     addi    $t1, $zero, STRUCT_TOTAL_SIZE  #loads $t1 with STRUCT_TOTAL_SIZE
@@ -564,10 +556,3 @@ incrementRegister:
 decrementRegister:
     addi    $s7, $s7, -1
     jr      $ra
-
-#self notes:
-#add more verbose responses
-#add successful operation after deletion
-#format responses better
-#average consumption is completely wrong
-#refactor delete method
