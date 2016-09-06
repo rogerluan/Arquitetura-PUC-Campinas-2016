@@ -252,38 +252,38 @@ NotDone:
 
 DeleteFunction:
     #move day
-    lw      $t5, 40($t0)
-    sw      $t5, 0($t0)
+    lw      $t5, 52($t0)        # DAY_POSITION + STRUCT_TOTAL_SIZE
+    sw      $t5, DAY_POSITION($t0)
     
     #move month
-    lw      $t5, 44($t0)
-    sw      $t5, 4($t0)
+    lw      $t5, 56($t0)        # MONTH_POSITION + STRUCT_TOTAL_SIZE
+    sw      $t5, MONTH_POSITION($t0)
     
     #move year
-    lw      $t5, 48($t0)
-    sw      $t5, 8($t0)
+    lw      $t5, 60($t0)        # YEAR_POSITION + STRUCT_TOTAL_SIZE
+    sw      $t5, YEAR_POSITION($t0)
     
     #move name
-    lw      $t5, 52($t0)
-    sw      $t5, 12($t0)
-    lw      $t5, 56($t0)
-    sw      $t5, 16($t0)
-    lw      $t5, 60($t0)
-    sw      $t5, 20($t0)
-    lw      $t5, 64($t0)
-    sw      $t5, 24($t0)
+    lw      $t5, 64($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE
+    sw      $t5, NAME_POSITION($t0)
+    lw      $t5, 68($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 4 (1 word)
+    sw      $t5, 16($t0)        # NAME_POSITION + 4 (1 word)
+    lw      $t5, 72($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 8 (2 words)
+    sw      $t5, 20($t0)        # NAME_POSITION + 8 (2 words)
+    lw      $t5, 76($t0)        # NAME_POSITION + STRUCT_TOTAL_SIZE + 12 (3 words)
+    sw      $t5, 24($t0)        # NAME_POSITION + 12 (3 words)
     
     #move kilometer
-    l.s     $f5, 68($t0)
-    s.s     $f5, 28($t0)
+    l.s     $f5, 80($t0)        # KILOMETER_POSITION + STRUCT_TOTAL_SIZE
+    s.s     $f5, KILOMETER_POSITION($t0)
     
     #move fuel quantity
-    l.s     $f5, 72($t0)
-    s.s     $f5, 32($t0)
+    l.s     $f5, 88($t0)        # LITERS_POSITION + STRUCT_TOTAL_SIZE
+    s.s     $f5, LITERS_POSITION($t0)
     
     #move price
-    l.s     $f5, 76($t0)
-    s.s     $f5, 36($t0)
+    l.s     $f5, 96($t0)        # PRICE_POSITION + STRUCT_TOTAL_SIZE
+    s.s     $f5, PRICE_POSITION($t0)
     jr      $ra
 
 
