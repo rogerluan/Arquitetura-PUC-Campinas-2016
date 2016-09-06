@@ -31,9 +31,6 @@ SYS_READ_CHAR       = 12
 STRUCT_TOTAL_SIZE   = 52
 STRUCT_NAME_SIZE    = 16
 
-INT_SIZE            = 4
-FLOAT_SIZE          = 8
-
 DAY_POSITION        = 0
 MONTH_POSITION      = 4
 YEAR_POSITION       = 8
@@ -60,24 +57,30 @@ database:           .space 520
 buffer:             .space STRUCT_NAME_SIZE
 
 ### messages ###
-message_menu:       .asciiz "\n Escolha qual operacao realizar: \n 1- Cadastrar abastecimento \n 2- Excluir abastecimento \n 3- Exibir abastecimentos \n 4- Exibir consumo médio \n 5- Exibir preço médio \n 6- Exibir ranking de postos\n"
+message_menu:       .asciiz "\n ======================================== \n\n Escolha qual operacao realizar: \n 1- Cadastrar abastecimento \n 2- Excluir abastecimento \n 3- Exibir abastecimentos \n 4- Exibir consumo médio \n 5- Exibir preço médio \n 6- Exibir ranking de postos\n"
 message_day:        .asciiz "\n Dia: "
 message_month:      .asciiz " Mes: "
 message_year:       .asciiz " Ano: "
-message_name:       .asciiz "\n Nome do posto: "
-message_kilometer:  .asciiz "\n Quilometragem total do carro: "
-message_liters:     .asciiz "\n Quantidade de litros abastecidos: "
-message_price:      .asciiz "\n Preco por litro do combustivel: "
+message_date:       .asciiz "\n Data do abastecimento (dd/mm/aa): "
+message_name:       .asciiz " Nome do posto: "
+message_kilometer:  .asciiz " Quilometragem total do carro: "
+message_liters:     .asciiz " Quantidade de litros abastecidos: "
+message_price:      .asciiz " Preco por litro do combustivel: "
 message_invalid:    .asciiz "\n Valor invalido"
 
 message_option:     .asciiz "\n Opcao: "
 
-actionMessage_store:        .asciiz "\n Cadastro de novo abastecimento!"
-actionMessage_delete:       .asciiz "\n Digite a data do abastecimento a ser excluido:"
-actionMessage_display:      .asciiz "\n Exibir"
-actionMessage_consumption:  .asciiz "\n Consumo"
-actionMessage_price:        .asciiz "\n Preco"
-actionMessage_ranking:      .asciiz "\n Ranking"
+actionMessage_store:        .asciiz "\n -------------------- \n\n Cadastro de novo abastecimento!"
+actionMessage_delete:       .asciiz "\n -------------------- \n\n Digite a data do abastecimento a ser excluido:"
+actionMessage_display:      .asciiz "\n -------------------- \n\n Abastecimentos Cadastrados: \n"
+actionMessage_consumption:  .asciiz "\n -------------------- \n\n Consumo medio do veiculo: "
+actionMessage_price:        .asciiz "\n -------------------- \n\n Preco medio dos postos: "
+actionMessage_ranking:      .asciiz "\n -------------------- \n\n Ranking dos postos: \n"
+
+message_list:               .asciiz "\n Abastecimento "
+message_deleted:            .asciiz "\n Abastecimento excluido com sucesso! "
+message_invalid_consumption:.asciiz "\n O consumo medio soh pode ser realizado a partir de 2 (dois) ou mais abastecimentos. "
+message_consumption_unit:   .asciiz "km/l\n"
 
 
 #########################################################################
@@ -245,6 +248,8 @@ DayOk:
 DeleteEnd:
     bne     $t5, 0, NotDone
     addi    $s7, $s7, -1
+    la      $a0, message_deleted
+    jal     displayMessage
     
 NotDone:
     j       menu
@@ -292,10 +297,12 @@ DeleteFunction:
 #########################################################################
 
 listPlaces:
+    la      $a0, actionMessage_display
+    jal     displayMessage
 
     la      $t0, database
     add     $t1, $s7, $zero             #move the register to a safe location
-    add     $t2, $t2, $zero             #reset $t2
+    add     $t2, $zero, $zero             #reset $t2
 startLoop:
     #stop condition
     slti    $t3, $t1, 1
@@ -321,6 +328,13 @@ ListFunction:
     #list place
     addi    $t2, $t2, 1                 #adds 1 to the printed counter
 
+    la      $a0, message_list
+    jal     displayMessage
+    add     $a0, $t2, $zero
+    jal     displayInt
+    la      $a0, message_date
+    jal     displayMessage
+
     #prints day
     lw      $t4, DAY_POSITION($t0)      #prepares print function to print day
     add     $a0, $zero, $t4
@@ -340,20 +354,28 @@ ListFunction:
     jal     displayNewLine
     
     #prints name
+    la      $a0, message_name
+    jal     displayMessage
     la      $a0, NAME_POSITION($t0)     #prepare print function to print name
     jal     displayMessage              #print name
     
     #prints kilometer
+    la      $a0, message_kilometer
+    jal     displayMessage
     l.s     $f12, KILOMETER_POSITION($t0)#prepare to print a float(kilometer)
     jal     displayFloat                #print kilometer
     jal     displayNewLine
     
     #prints fuel quantity
+    la      $a0, message_liters
+    jal     displayMessage
     l.s     $f12, LITERS_POSITION($t0)  #prepare to print a float(fuel quantity)
     jal     displayFloat                #print fuel quantity
     jal     displayNewLine
     
     #prints price
+    la      $a0, message_price
+    jal     displayMessage
     l.s     $f12, PRICE_POSITION($t0)   #prepare to print a float(price)
     jal     displayFloat                #print price
     jal     displayNewLine
@@ -369,25 +391,50 @@ ListFunction:
 #########################################################################
 
 consumption:
-    la      $t0, database               #get the database
-    add     $t1, $s7, $zero             #save the counter in a safe place
-    
+    #check validity condition
+    add     $t1, $s7, $zero                 # save the counter in a safe place
+    slti    $t2, $t1, 2                     # check if counter < 2
+    bne     $t2, $zero, ConsumptionInvalid  # consumption may only be calculated with 2 or more registries
+
+    mtc1    $zero, $f4                  # reset $f4 register
+
+    la      $a0, actionMessage_consumption
+    jal     displayMessage
+
+    la      $t0, database
+    addi    $t5, $zero, STRUCT_TOTAL_SIZE   # loads $t1 with STRUCT_TOTAL_SIZE
+    addi    $t4, $s7, -1                    # gets count-1 to jump to the init of struct's last registry
+    mult    $t5, $t4                        # multiplies counter*STRUCT_TOTAL_SIZE
+    mflo    $t2                             # result goes to $t2
+    add     $t0, $t0, $t2
+    lwc1    $f1, KILOMETER_POSITION($t0)    # gets kilometer of last database entry
+
+    la      $t0, database                   # loads first registry in $t0
+    lwc1    $f2, KILOMETER_POSITION($t0)    # gets kilometer of first database entry
+
+    sub.s   $f1, $f1, $f2                   # substracts higher (last) mileage from lowest (first)
+
 ConsumoLoop:
-    slti    $t3, $t1, 1                 #check if counter < 1
-    bne     $t3, $zero, ConsumoEnd      #if so, end loop
+    slti    $t3, $t1, 2                 # check if counter < 2 (cuz it shouldn't count the last fuel quantity)
+    bne     $t3, $zero, ConsumoEnd      # if so, end loop
+
+    lwc1    $f3, LITERS_POSITION($t0)   # store the fuel quantity of this position
+    add.s   $f4, $f4, $f3
     
-    l.s     $f2, KILOMETER_POSITION($t0)#store the kilometer of this position
-    l.s     $f4, LITERS_POSITION($t0)   #store the fuel quantity of this position
-    
-    div.s   $f12, $f2, $f4
-    jal     displayFloat
-    jal     displayNewLine
-    
-    add     $t0, $t0, STRUCT_TOTAL_SIZE #move to the next one
-    add     $t1, $t1, -1                #decrement counter
+    add     $t0, $t0, STRUCT_TOTAL_SIZE # move to the next registry
+    add     $t1, $t1, -1                # decrement counter
     j       ConsumoLoop
 ConsumoEnd:
+    div.s   $f12, $f1, $f4
+    jal     displayFloat
+    la      $a0, message_consumption_unit
+    jal     displayMessage
     j       menu
+
+ConsumptionInvalid:
+    la      $a0, message_invalid_consumption
+    jal     displayMessage
+    j menu
 
 
 #########################################################################
@@ -401,7 +448,6 @@ price:
     la      $t0, database               #get database
     add     $t1, $zero, $s7             #save counter in a safe place
     mtc1    $zero, $f1                  #zero one float register for use
-    mtc1    $zero, $f2                  #zero one float register for use
     mtc1    $zero, $f3                  #zero one float register for use
     mtc1    $zero, $f4                  #zero one float register for use
     mtc1    $zero, $f12
@@ -428,7 +474,7 @@ PriceEnd:
     mtc1    $s7, $f3
     cvt.s.w $f3, $f3                    #convert count int to float
     
-    div.s   $f12, $f12, $f3             #do the math  all_prices\counter
+    div.s   $f12, $f12, $f3             #do the math  all_prices/counter
     jal     displayFloat                #print the result
     j       menu
 
