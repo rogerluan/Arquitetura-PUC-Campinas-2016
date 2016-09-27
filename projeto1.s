@@ -65,22 +65,22 @@ message_date:       .asciiz "\n Data do abastecimento (dd/mm/aa): "
 message_name:       .asciiz " Nome do posto: "
 message_kilometer:  .asciiz " Quilometragem total do carro: "
 message_liters:     .asciiz " Quantidade de litros abastecidos: "
-message_price:      .asciiz " Preco por litro do combustivel: "
+message_price:      .asciiz " Preco por litro do combustivel (BRL): "
 message_invalid:    .asciiz "\n Valor invalido"
 
 message_option:     .asciiz "\n Opcao: "
 
-actionMessage_store:        .asciiz "\n -------------------- \n\n Cadastro de novo abastecimento!"
-actionMessage_delete:       .asciiz "\n -------------------- \n\n Digite a data do abastecimento a ser excluido:"
-actionMessage_display:      .asciiz "\n -------------------- \n\n Abastecimentos Cadastrados: \n"
-actionMessage_consumption:  .asciiz "\n -------------------- \n\n Consumo medio do veiculo: "
-actionMessage_price:        .asciiz "\n -------------------- \n\n Preco medio dos postos: "
-actionMessage_ranking:      .asciiz "\n -------------------- \n\n Ranking dos postos: \n"
+actionMessage_store:            .asciiz "\n -------------------- \n\n Cadastro de novo abastecimento!"
+actionMessage_delete:           .asciiz "\n -------------------- \n\n Digite a data do abastecimento a ser excluido:"
+actionMessage_display:          .asciiz "\n -------------------- \n\n Abastecimentos Cadastrados: \n"
+actionMessage_consumption:      .asciiz "\n -------------------- \n\n Consumo medio do veiculo (km/l): "
+actionMessage_price:            .asciiz "\n -------------------- \n\n Preco medio dos postos (BRL): "
+actionMessage_ranking:          .asciiz "\n -------------------- \n\n Ranking dos postos: \n"
 
-message_list:               .asciiz "\n Abastecimento "
-message_deleted:            .asciiz "\n Abastecimento excluido com sucesso! "
-message_invalid_consumption:.asciiz "\n O consumo medio soh pode ser realizado a partir de 2 (dois) ou mais abastecimentos. "
-message_consumption_unit:   .asciiz "km/l\n"
+message_list:                   .asciiz "\n Abastecimento "
+message_deleted:                .asciiz "\n Abastecimento excluido com sucesso! "
+message_invalid_consumption:    .asciiz "\n O consumo medio soh pode ser realizado a partir de 2 (dois) ou mais abastecimentos. "
+message_consumption_unit:       .asciiz "km/l\n"
 
 
 #########################################################################
@@ -102,12 +102,12 @@ menu:
     jal     displayMessage
     jal     readInt
     
-    beq     $v0, MENU_STORE, store
-    beq     $v0, MENU_DELETE, delete
-    beq     $v0, MENU_DISPLAY, listPlaces
-    beq     $v0, MENU_CONSUMPTION, consumption
-    beq     $v0, MENU_PRICE, price
-    beq     $v0, MENU_RANKING, ranking
+    beq     $v0, MENU_STORE, function_store
+    beq     $v0, MENU_DELETE, function_delete
+    beq     $v0, MENU_DISPLAY, function_list
+    beq     $v0, MENU_CONSUMPTION, function_consumption
+    beq     $v0, MENU_PRICE, function_price
+    beq     $v0, MENU_RANKING, function_ranking
 
     la      $a0, message_invalid
     jal     displayMessage
@@ -122,7 +122,7 @@ menu:
 #   Function 1) Store Data
 #########################################################################
 
-store:
+function_store:
     la      $a0, actionMessage_store
     jal     displayMessage
 
@@ -184,7 +184,7 @@ store:
 #   Function 2) Delete Data
 #########################################################################
 
-delete:
+function_delete:
     #Delete information
     la      $a0, actionMessage_delete
     jal     displayMessage
@@ -296,7 +296,7 @@ DeleteFunction:
 #   Function 3) Display/list Data
 #########################################################################
 
-listPlaces:
+function_list:
     la      $a0, actionMessage_display
     jal     displayMessage
 
@@ -390,7 +390,7 @@ ListFunction:
 #   Function 4) Display Average Consumption
 #########################################################################
 
-consumption:
+function_consumption:
     #check validity condition
     add     $t1, $s7, $zero                 # save the counter in a safe place
     slti    $t2, $t1, 2                     # check if counter < 2
@@ -441,7 +441,7 @@ ConsumptionInvalid:
 #   Function 5) Display Average Price
 #########################################################################
 
-price:
+function_price:
     la      $a0, actionMessage_price
     jal     displayMessage
     
@@ -483,7 +483,7 @@ PriceEnd:
 #   Function 6) Display Gas Stations Ranking
 #########################################################################
 
-ranking:
+function_ranking:
     la      $a0, actionMessage_ranking
     jal     displayMessage
     j       menu
@@ -540,7 +540,6 @@ readName:
 
     
 loadDatabase:
-    ### this works: ###
     la      $s1, database
     addi    $t1, $zero, STRUCT_TOTAL_SIZE  #loads $t1 with STRUCT_TOTAL_SIZE
     mult    $t1, $s7                       #multiplies counter*STRUCT_TOTAL_SIZE
