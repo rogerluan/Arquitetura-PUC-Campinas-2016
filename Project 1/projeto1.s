@@ -5,10 +5,9 @@
 # Commas are followed by a whitespace.
 # Macros cannot be used in QtSpim.
 
-
-#########################################################################
+################################################################################
 #   System call constants
-#########################################################################
+################################################################################
 
 SYS_PRINT_INT       = 1
 SYS_PRINT_FLOAT     = 2
@@ -24,9 +23,9 @@ SYS_PRINT_CHAR      = 11
 SYS_READ_CHAR       = 12
 
 
-#########################################################################
+################################################################################
 #   Program defined constants
-#########################################################################
+################################################################################
 
 STRUCT_TOTAL_SIZE   = 40
 STRUCT_NAME_SIZE    = 16
@@ -47,9 +46,9 @@ MENU_PRICE          = 5
 MENU_RANKING        = 6
 
 
-#########################################################################
+################################################################################
 #   Program Variables
-#########################################################################
+################################################################################
 
 .data
 ### database ###
@@ -83,17 +82,17 @@ message_invalid_consumption:    .asciiz "\n O consumo medio soh pode ser realiza
 message_consumption_unit:       .asciiz "km/l\n"
 
 
-#########################################################################
+################################################################################
 #   Main Program
-#########################################################################
+################################################################################
 
 .text
 .globl main
 
 main:
-    addi $s7, $zero, 0	# Limpa o conteúdo do contador
-    add $t0, $zero, $zero	# Limpa o conteúdo do t0
-    add $t1, $zero, $zero	# Limpa o conteúdo do t1
+    addi    $s7, $zero, $zero   # Limpa o conteúdo do contador
+    add     $t0, $zero, $zero	# Limpa o conteúdo do t0
+    add     $t1, $zero, $zero	# Limpa o conteúdo do t1
 
 menu:
     la      $a0, message_menu
@@ -114,102 +113,91 @@ menu:
     j       menu
 
 
-#########################################################################
+################################################################################
 #   Actions
-#########################################################################
+################################################################################
 
-#########################################################################
+################################################################################
 #   Function 1) Store Data
-#########################################################################
+################################################################################
 
 function_store:
     la      $a0, actionMessage_store
     jal     displayMessage
 
+    jal     loadDatabase
+
     #reads day
     la      $a0, message_day
     jal     displayMessage
-
-    jal     loadDatabase
     jal     readInt
     sw      $v0, DAY_POSITION($s1)
 
     #reads month
     la      $a0, message_month
     jal     displayMessage
-    
     jal     readInt
     sw      $v0, MONTH_POSITION($s1)
 
     #reads year
     la      $a0, message_year
     jal     displayMessage
-    
     jal     readInt
     sw      $v0, YEAR_POSITION($s1)
 
     #reads name
     la      $a0, message_name
     jal     displayMessage
-
     jal     readName
     
     #reads kilometer
     la      $a0, message_kilometer
     jal     displayMessage
-    
     jal     readFloat
     s.s     $f0, KILOMETER_POSITION($s1)
     
     #reads consumption
     la      $a0, message_liters
     jal     displayMessage
-    
     jal     readFloat
     s.s     $f0, LITERS_POSITION($s1)
 
     #reads price
     la      $a0, message_price
     jal     displayMessage
-    
     jal     readFloat
     s.s     $f0, PRICE_POSITION($s1)
     
     jal     incrementRegister
-    
     j       menu
 
 
-#########################################################################
+################################################################################
 #   Function 2) Delete Data
-#########################################################################
+################################################################################
 
 function_delete:
-    #Delete information
     la      $a0, actionMessage_delete
     jal     displayMessage
 
+    #get day
     la      $a0, message_day
     jal     displayMessage
-    
-    #get day 
     jal     readInt
     add     $t1, $v0, $zero
 
+    #get month
     la      $a0, message_month
     jal     displayMessage
-    
-    #get month
     jal     readInt
     add     $t2, $v0, $zero
 
+    #get year
     la      $a0, message_year
     jal     displayMessage
-    
-    #get year
     jal     readInt
     add     $t3, $v0, $zero
-    
+
     la      $t0, database       # load database
     add     $t4, $s7, $zero     # get counter
 
@@ -292,9 +280,9 @@ DeleteFunction:
     jr      $ra
 
 
-#########################################################################
+################################################################################
 #   Function 3) Display/list Data
-#########################################################################
+################################################################################
 
 function_list:
     la      $a0, actionMessage_display
@@ -317,7 +305,7 @@ startLoop:
     j       startLoop
 
 endLoop:
-    j      menu
+    j       menu
 
 
 ListFunction:
@@ -386,9 +374,9 @@ ListFunction:
     jr      $ra
 
 
-#########################################################################
+################################################################################
 #   Function 4) Display Average Consumption
-#########################################################################
+################################################################################
 
 function_consumption:
     #check validity condition
@@ -434,12 +422,12 @@ ConsumoEnd:
 ConsumptionInvalid:
     la      $a0, message_invalid_consumption
     jal     displayMessage
-    j menu
+    j       menu
 
 
-#########################################################################
+################################################################################
 #   Function 5) Display Average Price
-#########################################################################
+################################################################################
 
 function_price:
     la      $a0, actionMessage_price
@@ -479,9 +467,9 @@ PriceEnd:
     j       menu
 
 
-#########################################################################
+################################################################################
 #   Function 6) Display Gas Stations Ranking
-#########################################################################
+################################################################################
 
 function_ranking:
     la      $a0, actionMessage_ranking
@@ -489,9 +477,9 @@ function_ranking:
     j       menu
 
 
-#########################################################################
+################################################################################
 #   Helpers
-#########################################################################
+################################################################################
 
 displayMessage:
     li      $v0, SYS_PRINT_STRING
@@ -545,8 +533,7 @@ loadDatabase:
     mult    $t1, $s7                       #multiplies counter*STRUCT_TOTAL_SIZE
     mflo    $t2
     add     $s1, $s1, $t2
-
-    jr $ra
+    jr      $ra
 
 incrementRegister:
     addi    $s7, $s7, 1
