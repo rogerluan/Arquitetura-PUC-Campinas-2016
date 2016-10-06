@@ -18,12 +18,6 @@ PACKAGE components IS
 				 Rin, Clock : IN STD LOGIC ;
 				 Q : OUT STD LOGIC VECTOR(N−1 DOWNTO 0) ) ;
 	END COMPONENT ;
-
-	COMPONENT shiftr -- left-to-right shift register with async reset
-		GENERIC ( K : INTEGER := 4 ) ;
-		PORT ( Resetn, Clock, w : IN STD LOGIC ;
-				 Q : BUFFER STD LOGIC VECTOR(1 TO K) ) ;
-	END component ;
 	
 	COMPONENT trin -- tri-state buffers
 		GENERIC ( N : INTEGER := 8 ) ;
