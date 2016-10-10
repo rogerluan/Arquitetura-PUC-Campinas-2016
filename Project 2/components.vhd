@@ -1,14 +1,5 @@
 LIBRARY ieee ;
 USE ieee.std logic 1164.all ;
--- Math Libraries
-USE ieee.std_logic_arith.all;
-USE ieee.std_logic_textio.all;
-USE ieee.numeric_bit.all;
-USE ieee.numeric_std.all;
-USE ieee.std_logic_signed.all;
-USE ieee.std_logic_unsigned.all;
-USE ieee.math_real.all;
-USE ieee.math_complex.all;
 
 PACKAGE components IS
 
@@ -25,10 +16,24 @@ PACKAGE components IS
 				 E : IN STD LOGIC ;
 				 F : OUT STD LOGIC VECTOR(N−1 DOWNTO 0) ) ;
 	END COMPONENT ;
-	
-	COMPONENT upcount -- State Counter
-		PORT ( Clear, Clock : IN STD LOGIC ;
-				 Q : BUFFER STD LOGIC VECTOR(1 DOWNTO 0) ) ;
+
+	COMPONENT uc -- Unit Control
+		PORT ( 	Data : IN STD LOGIC VECTOR(24 DOWNTO 0) ;
+			   	Clock: IN STD LOGIC ;
+				Imedout : OUT STD LOGIC ;
+				Rin : OUT STD LOGIC VECTOR(0 TO 3) ;
+				Rout : OUT STD LOGIC VECTOR(0 TO 3) ;
+				Rtempin : OUT STD LOGIC VECTOR(0 TO 1) ;
+				Rtempout : OUT STD LOGIC VECTOR(0 TO 1) ;
+				Rsysin : OUT STD LOGIC ;
+				Rsysout : OUT STD LOGIC ;
+				ULA : OUT STD LOGIC ) ;
+	END COMPONENT;
+
+	COMPONENT alu -- arithmetic logical unit
+		PORT (  dataSource0, dataSource1 : IN STD LOGIC VECTOR(7 DOWNTO 0);
+		   		opcode : IN STD LOGIC;
+		   		dataOutput : OUT STD LOGIC VECTOR(7 DOWNTO 0));
 	END COMPONENT ;
 	
 END components ;
