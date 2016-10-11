@@ -1,0 +1,20 @@
+LIBRARY ieee ;
+USE ieee.std logic 1164.all ;
+
+ENTITY regn IS
+	GENERIC ( N : INTEGER := 8 ) ;
+	PORT ( R : IN STD LOGIC VECTOR(Nâˆ’1 DOWNTO 0) ;
+			Rin, Clock : IN STD LOGIC ;
+			Q : OUT STD LOGIC VECTOR(Nâˆ’1 DOWNTO 0) ) ;
+END regn ;
+
+ARCHITECTURE Behavior OF regn IS
+	BEGIN
+	PROCESS
+	BEGIN
+	WAIT UNTIL Clockâ€™EVENT AND Clock = â€™1â€™ ;
+		IF Rin = â€™1â€™ THEN
+			Q < = R ;
+		END IF ;
+	END PROCESS ;
+END Behavior ;

@@ -5,25 +5,24 @@ USE work.components.all ;
 ENTITY cpu IS
 	PORT ( Data : IN STD_LOGIC_VECTOR(24 DOWNTO 0) ;
 		   Clock : IN STD_LOGIC;
-		   BusWires : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-		   r0_stream, r1_stream, r2_stream, r3_stream, rsys_stream, rtemp0_stream, rtemp1_stream  : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)) ;	-- Used for debugging
+		   BusWires : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+		   r0_stream, r1_stream, r2_stream, r3_stream, rsys_stream, rtemp0_stream, rtemp1_stream  : OUT STD_LOGIC_VECTOR (15 DOWNTO 0)) ;	-- Used for debugging
 END cpu ;
 
 ARCHITECTURE Behavior OF cpu IS
-	SIGNAL Rin, Rout, Q : STD_LOGIC_VECTOR(1 TO 3) ;
-	SIGNAL r0_data, r1_data, r2_data, r3_data, rsys_data, rtemp0_data, rtemp1_data : STD_LOGIC_VECTOR(7 DOWNTO 0) ;
+	SIGNAL r0_data, r1_data, r2_data, r3_data, rsys_data, rtemp0_data, rtemp1_data : STD_LOGIC_VECTOR(15 DOWNTO 0) ;
 
-	SIGNAL Imedout, Rsysin, Rsysout, ALU : STD_LOGIC;
+	SIGNAL Imedout, Rsysin, Rsysout, ULA : STD_LOGIC;
 	SIGNAL Rtempin, Rtempout : STD_LOGIC_VECTOR(0 TO 1);
 	SIGNAL Rin, Rout : STD_LOGIC_VECTOR(0 TO 3);
 	
 BEGIN 
 
 	-- Unit Control
-	uc: 		uc PORT MAP ( Data, Clock, Imedout, Rin, Rout, Rtempin, Rtempout, Rsysin, Rsysout, ALU );
+	unit_control: 		uc PORT MAP ( Data, Clock, Imedout, Rin, Rout, Rtempin, Rtempout, Rsysin, Rsysout, ULA );
 
-	-- ALU
-	alu:		alu PORT MAP ( rtemp0_data, BusWires, ALU, rtemp1_data );
+	-- ULA
+	alu_component:		ula PORT MAP ( rtemp0_data, BusWires, ULA, rtemp1_data );
 
 	-- Registers
 	reg0: 		regn PORT MAP ( BusWires, Rin(0), Clock, r0_data ) ;
