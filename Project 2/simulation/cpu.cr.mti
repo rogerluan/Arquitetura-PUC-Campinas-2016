@@ -1,0 +1,13 @@
+{C:/Users/RosangelaAparecidada/Documents/GitHub/Arquitetura-PUC-Campinas-2016/Project 2/cpu final/cpu.vhd} {0 {vcom -work work -2002 -explicit -stats=none {C:/Users/RosangelaAparecidada/Documents/GitHub/Arquitetura-PUC-Campinas-2016/Project 2/cpu final/cpu.vhd}
+Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+** Error: (vcom-11) Could not find work.components.
+
+** Error (suppressible): C:/Users/RosangelaAparecidada/Documents/GitHub/Arquitetura-PUC-Campinas-2016/Project 2/cpu final/cpu.vhd(3): (vcom-1195) Cannot find expanded name "work.components".
+
+** Error: C:/Users/RosangelaAparecidada/Documents/GitHub/Arquitetura-PUC-Campinas-2016/Project 2/cpu final/cpu.vhd(3): Unknown expanded name.
+** Error: C:/Users/RosangelaAparecidada/Documents/GitHub/Arquitetura-PUC-Campinas-2016/Project 2/cpu final/cpu.vhd(5): VHDL Compiler exiting
+
+} {6.0 7.0 10.0 12.0} {}}
