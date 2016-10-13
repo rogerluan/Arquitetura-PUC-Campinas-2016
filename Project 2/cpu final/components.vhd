@@ -1,7 +1,16 @@
 LIBRARY ieee ;
 USE ieee.std_logic_1164.all ;
+-- Math Libraries
+USE ieee.std_logic_arith.all;
+USE ieee.std_logic_unsigned.all; 
 
 PACKAGE components IS
+
+	COMPONENT alu_component -- arithmetic logical unit
+		PORT (  dataSource0, dataSource1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+		   		opcode : IN STD_LOGIC;
+		   		dataOutput : OUT STD_LOGIC_VECTOR(15 DOWNTO 0));
+	END COMPONENT ;
 
 	COMPONENT regn -- register
 		GENERIC ( N : INTEGER := 16 ) ;
@@ -29,11 +38,5 @@ PACKAGE components IS
 				Rsysout : OUT STD_LOGIC ;
 				ULA : OUT STD_LOGIC );
 	END COMPONENT;
-
-	COMPONENT ula -- arithmetic logical unit
-		PORT (  dataSource0, dataSource1 : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-		   		opcode : IN STD_LOGIC;
-		   		dataOutput : OUT STD_LOGIC_VECTOR(15 DOWNTO 0));
-	END COMPONENT ;
 	
 END components ;

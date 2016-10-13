@@ -10,19 +10,18 @@ ENTITY cpu IS
 END cpu ;
 
 ARCHITECTURE Behavior OF cpu IS
-	SIGNAL r0_data, r1_data, r2_data, r3_data, rsys_data, rtemp0_data, rtemp1_data : STD_LOGIC_VECTOR(15 DOWNTO 0) ;
+	SIGNAL r0_data, r1_data, r2_data, r3_data, rsys_data, rtemp0_data, rtemp1_in_data, rtemp1_out_data : STD_LOGIC_VECTOR(15 DOWNTO 0) ;
 
-	SIGNAL Imedout, Rsysin, Rsysout, ULA : STD_LOGIC;
+	SIGNAL Imedout, Rsysin, Rsysout, ALU : STD_LOGIC;
 	SIGNAL Rtempin, Rtempout : STD_LOGIC_VECTOR(0 TO 1);
 	SIGNAL Rin, Rout : STD_LOGIC_VECTOR(0 TO 3);
 	
 BEGIN 
-
 	-- Unit Control
-	unit_control: 		uc PORT MAP ( Data, Clock, Imedout, Rin, Rout, Rtempin, Rtempout, Rsysin, Rsysout, ULA );
-
-	-- ULA
-	alu_component:		ula PORT MAP ( rtemp0_data, BusWires, ULA, rtemp1_data );
+	unit_control: 		uc PORT MAP ( Data, Clock, Imedout, Rin, Rout, Rtempin, Rtempout, Rsysin, Rsysout, ALU );
+	
+	-- ALU
+	logical_unit: alu_component PORT MAP (rtemp0_data, BusWires, ALU, rtemp1_in_data);
 
 	-- Registers
 	reg0: 		regn PORT MAP ( BusWires, Rin(0), Clock, r0_data ) ;
@@ -31,7 +30,7 @@ BEGIN
 	reg3: 		regn PORT MAP ( BusWires, Rin(3), Clock, r3_data ) ;
 	regsys: 	regn PORT MAP ( BusWires, Rsysin, Clock, rsys_data ) ;
 	regtemp0:	regn PORT MAP ( BusWires, Rtempin(0), Clock, rtemp0_data ) ;
-	regtemp1: 	regn PORT MAP ( BusWires, Rtempin(1), Clock, rtemp1_data ) ;
+	regtemp1: 	regn PORT MAP ( rtemp1_in_data, Rtempin(1), Clock, rtemp1_out_data ) ;
 
 	-- Tri-States
 	tri_imed: 	trin PORT MAP ( Data(15 DOWNTO 0), Imedout, BusWires ) ;
@@ -41,14 +40,15 @@ BEGIN
 	tri_r3: 	trin PORT MAP ( r3_data, Rout(3), BusWires ) ;
 	tri_rsys: 	trin PORT MAP ( rsys_data, Rsysout, BusWires ) ;
 	tri_rtemp0: trin PORT MAP ( rtemp0_data, Rtempout(0), BusWires ) ;
-	tri_rtemp1: trin PORT MAP ( rtemp1_data, Rtempout(1), BusWires ) ;
+	tri_rtemp1: trin PORT MAP ( rtemp1_out_data, Rtempout(1), BusWires ) ;
 
-	r0_stream <= r0_data;
-	r1_stream <= r1_data;
-	r2_stream <= r2_data;
-	r3_stream <= r3_data;
-	rsys_stream <= rsys_data;
-	rtemp0_stream <= rtemp0_data;
-	rtemp1_stream <= rtemp1_data;
+
+--	r0_stream <= r0_data;
+--	r1_stream <= r1_data;
+--	r2_stream <= r2_data;
+--	r3_stream <= r3_data;
+--	rsys_stream <= rsys_data;
+--	rtemp0_stream <= rtemp0_data;
+--	rtemp1_stream <= rtemp1_data;
 
 END Behavior ;

@@ -1,0 +1,15 @@
+
+State Machine - |cpu|uc:unit_control|state
+Name state.SUBI state.SUB state.ADDI state.ADD state.ARITH_OUT state.ARITH_IN state.XCHG_3 state.XCHG_2 state.XCHG_1 state.MOV state.MOVI state.DECODE 
+state.DECODE 0 0 0 0 0 0 0 0 0 0 0 0 
+state.MOVI 0 0 0 0 0 0 0 0 0 0 1 1 
+state.MOV 0 0 0 0 0 0 0 0 0 1 0 1 
+state.XCHG_1 0 0 0 0 0 0 0 0 1 0 0 1 
+state.XCHG_2 0 0 0 0 0 0 0 1 0 0 0 1 
+state.XCHG_3 0 0 0 0 0 0 1 0 0 0 0 1 
+state.ARITH_IN 0 0 0 0 0 1 0 0 0 0 0 1 
+state.ARITH_OUT 0 0 0 0 1 0 0 0 0 0 0 1 
+state.ADD 0 0 0 1 0 0 0 0 0 0 0 1 
+state.ADDI 0 0 1 0 0 0 0 0 0 0 0 1 
+state.SUB 0 1 0 0 0 0 0 0 0 0 0 1 
+state.SUBI 1 0 0 0 0 0 0 0 0 0 0 1 

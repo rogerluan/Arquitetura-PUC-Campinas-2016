@@ -1,0 +1,11 @@
+Fitter Status : Successful - Thu Oct 13 20:10:50 2016
+Quartus Prime Version : 16.0.0 Build 211 04/27/2016 SJ Lite Edition
+Revision Name : cpu
+Top-level Entity Name : cpu
+Family : MAX II
+Device : EPM1270F256C3
+Timing Models : Final
+Total logic elements : 153 / 1,270 ( 12 % )
+Total pins : 154 / 212 ( 73 % )
+Total virtual pins : 0
+UFM blocks : 0 / 1 ( 0 % )
