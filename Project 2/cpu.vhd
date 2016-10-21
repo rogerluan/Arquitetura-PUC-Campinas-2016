@@ -43,12 +43,12 @@ BEGIN
 	tri_rtemp1: trin PORT MAP ( rtemp1_out_data, Rtempout(1), BusWires ) ;
 
 
---	r0_stream <= r0_data;
---	r1_stream <= r1_data;
---	r2_stream <= r2_data;
---	r3_stream <= r3_data;
---	rsys_stream <= rsys_data;
---	rtemp0_stream <= rtemp0_data;
---	rtemp1_stream <= rtemp1_data;
+	r0_stream <= r0_data;
+	r1_stream <= r1_data;
+	r2_stream <= r2_data;
+	r3_stream <= r3_data;
+	rsys_stream <= rsys_data;
+	rtemp0_stream <= rtemp0_data;
+	rtemp1_stream <= rtemp1_in_data;
 
 END Behavior ;
