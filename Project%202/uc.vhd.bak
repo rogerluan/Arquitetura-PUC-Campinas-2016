@@ -13,10 +13,10 @@ ENTITY uc IS
 			Rtempout : OUT STD_LOGIC_VECTOR(0 TO 1) ;
 			Rsysin : OUT STD_LOGIC ;
 			Rsysout : OUT STD_LOGIC ;
-			ULA : OUT STD_LOGIC ) ;
+			ALU : OUT STD_LOGIC ) ;
 END uc ;
 
-ARCHITECTURE Behavior OF uc IS
+ARCHITECTURE Behavior OF uc_state_machine IS
 	TYPE States IS (DECODE, 
 						MOVI, 
 						MOV, 
@@ -31,7 +31,7 @@ BEGIN
 	BEGIN
 		IF (Clock'EVENT AND Clock ='1') THEN
 			CASE state IS
-				WHEN DECODE =>
+				WHEN DECODE =>x
 					instruction <= Data(24 DOWNTO 22) ;
 					CASE instruction IS
 						WHEN "001" => --MOVI
@@ -54,7 +54,7 @@ BEGIN
 					Rtempout <= "00";
 					Rsysin <= '0';
 					Rsysout <= '0';
-					ULA <= '0';
+					ALU <= '0';
 
 				WHEN MOVI =>
 					regDest <= Data(21 DOWNTO 20);
@@ -77,7 +77,7 @@ BEGIN
 					Rtempout <= "00";
 					Rsysin <= '0';
 					Rsysout <= '0';
-					ULA <= '0';
+					ALU <= '0';
 
 					--Sets the next state
 					state <= DECODE;
@@ -114,7 +114,7 @@ BEGIN
 					Rtempout <= "00";
 					Rsysin <= '0';
 					Rsysout <= '0';
-					ULA <= '0';
+					ALU <= '0';
 
 					--Sets the next state
 					state <= DECODE;
@@ -140,7 +140,7 @@ BEGIN
 					Rtempin <= "00";
 					Rtempout <= "00";
 					Rsysout <= '0';
-					ULA <= '0';
+					ALU <= '0';
 
 					--Sets the next state
 					state <= XCHG_2;
@@ -177,7 +177,7 @@ BEGIN
 					Rtempout <= "00";
 					Rsysin <= '0';
 					Rsysout <= '0';
-					ULA <= '0';
+					ALU <= '0';
 
 					--Sets the next state
 					state <= XCHG_3;
@@ -203,7 +203,7 @@ BEGIN
 					Rtempin <= "00";
 					Rtempout <= "00";
 					Rsysin <= '0';
-					ULA <= '0';
+					ALU <= '0';
 
 					--Sets the next state
 					state <= DECODE;
@@ -229,7 +229,7 @@ BEGIN
 					Rtempout <= "00";
 					Rsysin <= '0';
 					Rsysout <= '0';
-					ULA <= '0';
+					ALU <= '0';
 
 					--Sets the next state
 					CASE instruction IS
@@ -266,7 +266,7 @@ BEGIN
 					Rtempin <= "00";
 					Rsysin <= '0';
 					Rsysout <= '0';
-					ULA <= '0';
+					ALU <= '0';
 
 					--Sets the next state
 					state <= ARITH_OUT;
@@ -285,7 +285,7 @@ BEGIN
 							Rout(3) <= '1';
 					END CASE;
 					Rtempin <= "10"; --Opens the IN stream in TEMP2 register
-					ULA <= '0'; --This should be the signal for SUM
+					ALU <= '0'; --This should be the signal for SUM
 
 					--Zero all the rest
 					Imedout <= '0';
@@ -300,7 +300,7 @@ BEGIN
 				WHEN ADDI =>
 					Imedout <= '1';
 					Rtempin <= "10"; --Opens the IN stream in TEMP2 register
-					ULA <= '0'; --This should be the signal for SUM
+					ALU <= '0'; --This should be the signal for SUM
 
 					--Zero all the rest
 					Rin <= "0000";
@@ -326,7 +326,7 @@ BEGIN
 							Rout(3) <= '1';
 					END CASE;
 					Rtempin <= "10"; --Opens the IN signal in TEMP2 register
-					ULA <= '1'; --This should be the signal for SUBTRACTION
+					ALU <= '1'; --This should be the signal for SUBTRACTION
 
 					--Zero all the rest
 					Imedout <= '0';
@@ -341,7 +341,7 @@ BEGIN
 				WHEN SUBI =>
 					Imedout <= '1';
 					Rtempin <= "10"; --Opens the IN stream in TEMP2 register
-					ULA <= '1'; --This should be the signal for SUBTRACTION
+					ALU <= '1'; --This should be the signal for SUBTRACTION
 
 					--Zero all the rest
 					Rin <= "0000";
