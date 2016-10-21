@@ -2,10 +2,10 @@ LIBRARY ieee ;
 USE ieee.std_logic_1164.all ;
 
 ENTITY regn IS
-	GENERIC ( N : INTEGER := 8 ) ;
-	PORT ( R : IN STD_LOGIC_VECTOR(N−1 DOWNTO 0) ;
+	GENERIC ( N : INTEGER := 16 ) ;
+	PORT ( R : IN STD_LOGIC_VECTOR(N-1 DOWNTO 0) ;
 			Rin, Clock : IN STD_LOGIC ;
-			Q : OUT STD_LOGIC_VECTOR(N−1 DOWNTO 0) ) ;
+			Q : OUT STD_LOGIC_VECTOR(N-1 DOWNTO 0) ) ;
 END regn ;
 
 ARCHITECTURE Behavior OF regn IS
