@@ -12,7 +12,7 @@ ARCHITECTURE Behavior OF regn IS
 	BEGIN
 	PROCESS
 	BEGIN
-	WAIT UNTIL Clock'EVENT AND Clock = '1' ;
+	WAIT UNTIL Clock'EVENT AND Clock = '0' ;
 		IF Rin = '1' THEN
 			Q <= R ;
 		END IF ;
