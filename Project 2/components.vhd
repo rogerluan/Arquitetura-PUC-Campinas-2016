@@ -36,7 +36,8 @@ PACKAGE components IS
 				Rtempout : OUT STD_LOGIC_VECTOR(0 TO 1) ;
 				Rsysin : OUT STD_LOGIC ;
 				Rsysout : OUT STD_LOGIC ;
-				ULA : OUT STD_LOGIC );
+				ULA : OUT STD_LOGIC ;
+				debug_state: OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
 	END COMPONENT;
 	
 END components ;

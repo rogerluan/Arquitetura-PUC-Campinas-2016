@@ -13,7 +13,8 @@ ENTITY uc IS
 			Rtempout : OUT STD_LOGIC_VECTOR(0 TO 1) ;
 			Rsysin : OUT STD_LOGIC ;
 			Rsysout : OUT STD_LOGIC ;
-			ULA : OUT STD_LOGIC ) ;
+			ULA : OUT STD_LOGIC ;
+			debug_state: OUT STD_LOGIC_VECTOR(3 DOWNTO 0)) ;
 END uc ;
 
 ARCHITECTURE Behavior OF uc IS
@@ -23,7 +24,7 @@ ARCHITECTURE Behavior OF uc IS
 						XCHG_1, XCHG_2, XCHG_3,
 						ARITH_IN, ARITH_OUT,
 						ADD, ADDI, SUB, SUBI) ;
-	SIGNAL state : States ;
+	SIGNAL state : States := DECODE;
 	SIGNAL instruction : STD_LOGIC_VECTOR (2 DOWNTO 0);
 	SIGNAL regSource, regTarget, regDest : STD_LOGIC_VECTOR (1 DOWNTO 0);
 BEGIN
@@ -32,6 +33,7 @@ BEGIN
 		IF (Clock'EVENT AND Clock ='1') THEN
 			CASE state IS
 				WHEN DECODE =>
+					debug_state <= "0000";
 					instruction <= Data(24 DOWNTO 22) ;
 					CASE instruction IS
 						WHEN "001" => --MOVI
@@ -57,6 +59,7 @@ BEGIN
 					ULA <= '0';
 
 				WHEN MOVI =>
+					debug_state <= "0001";
 					regDest <= Data(21 DOWNTO 20);
 					Rin <= "0000";
 					CASE regDest IS
@@ -83,6 +86,7 @@ BEGIN
 					state <= DECODE;
 
 				WHEN MOV =>
+					debug_state <= "0010";
 					regDest <= Data(21 DOWNTO 20);
 					regSource <= Data(19 DOWNTO 18);
 					Rin <= "0000";
@@ -120,6 +124,7 @@ BEGIN
 					state <= DECODE;
 
 				WHEN XCHG_1 =>
+					debug_state <= "0011";
 					regSource <= Data(21 DOWNTO 20); --First register in XCHG call
 					Rout <= "0000";
 					CASE regSource IS
@@ -146,6 +151,7 @@ BEGIN
 					state <= XCHG_2;
 
 				WHEN XCHG_2 =>
+					debug_state <= "0100";
 					regDest <= Data(21 DOWNTO 20); --First register in XCHG call
 					regSource <= Data(19 DOWNTO 18); --Second register in XCHG call
 					Rout <= "0000";
@@ -183,6 +189,7 @@ BEGIN
 					state <= XCHG_3;
 
 				WHEN XCHG_3 =>
+					debug_state <= "0101";
 					regDest <= Data(19 DOWNTO 18); --Second register in XCHG call
 					Rin <= "0000";
 					CASE regDest IS
@@ -209,6 +216,7 @@ BEGIN
 					state <= DECODE;
 
 				WHEN ARITH_IN =>
+					debug_state <= "0110";
 					regSource <= Data(19 DOWNTO 18); --Second register in ARITH call
 					Rout <= "0000";
 					CASE regSource IS
@@ -246,6 +254,7 @@ BEGIN
 					END CASE;
 
 				WHEN ARITH_OUT =>
+					debug_state <= "0111";
 					regDest <= Data(21 DOWNTO 20); --First register in ARITH call
 					Rin <= "0000";
 					CASE regDest IS
@@ -272,6 +281,7 @@ BEGIN
 					state <= ARITH_OUT;
 
 				WHEN ADD =>
+					debug_state <= "1000";
 					regTarget <= Data(17 DOWNTO 16); --Third register in ARITH call
 					Rout <= "0000";
 					CASE regTarget IS
@@ -298,6 +308,7 @@ BEGIN
 					state <= ARITH_OUT;
 
 				WHEN ADDI =>
+					debug_state <= "1001";
 					Imedout <= '1';
 					Rtempin <= "10"; --Opens the IN stream in TEMP2 register
 					ULA <= '0'; --This should be the signal for SUM
@@ -313,6 +324,7 @@ BEGIN
 					state <= ARITH_OUT;
 
 				WHEN SUB => 
+					debug_state <= "1010";
 					regTarget <= Data(17 DOWNTO 16); --Third register in ARITH call
 					Rout <= "0000";
 					CASE regTarget IS
@@ -339,6 +351,7 @@ BEGIN
 					state <= ARITH_OUT;
 
 				WHEN SUBI =>
+					debug_state <= "1011";
 					Imedout <= '1';
 					Rtempin <= "10"; --Opens the IN stream in TEMP2 register
 					ULA <= '1'; --This should be the signal for SUBTRACTION

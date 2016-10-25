@@ -3,10 +3,11 @@ USE ieee.std_logic_1164.all ;
 USE work.components.all ;
 
 ENTITY cpu IS
-	PORT ( Data : IN STD_LOGIC_VECTOR(24 DOWNTO 0) ;
-		   Clock : IN STD_LOGIC;
-		   BusWires : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-		   r0_stream, r1_stream, r2_stream, r3_stream, rsys_stream, rtemp0_stream, rtemp1_stream  : OUT STD_LOGIC_VECTOR (15 DOWNTO 0)) ;	-- Used for debugging
+	PORT ( 	Data : IN STD_LOGIC_VECTOR(24 DOWNTO 0) ;
+		   	Clock : IN STD_LOGIC;
+		   	BusWires : INOUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+			r0_stream, r1_stream, r2_stream, r3_stream, rsys_stream, rtemp0_stream, rtemp1_stream  : OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+			debug_state: OUT STD_LOGIC_VECTOR (3 DOWNTO 0)) ;	-- Used for debugging
 END cpu ;
 
 ARCHITECTURE Behavior OF cpu IS
@@ -18,7 +19,7 @@ ARCHITECTURE Behavior OF cpu IS
 	
 BEGIN 
 	-- Unit Control
-	unit_control: 		uc PORT MAP ( Data, Clock, Imedout, Rin, Rout, Rtempin, Rtempout, Rsysin, Rsysout, ALU );
+	unit_control: uc PORT MAP ( Data, Clock, Imedout, Rin, Rout, Rtempin, Rtempout, Rsysin, Rsysout, ALU, debug_state);
 	
 	-- ALU
 	logical_unit: alu_component PORT MAP (rtemp0_data, BusWires, ALU, rtemp1_in_data);
@@ -42,7 +43,7 @@ BEGIN
 	tri_rtemp0: trin PORT MAP ( rtemp0_data, Rtempout(0), BusWires ) ;
 	tri_rtemp1: trin PORT MAP ( rtemp1_out_data, Rtempout(1), BusWires ) ;
 
-
+	-- Debugging Variables
 	r0_stream <= r0_data;
 	r1_stream <= r1_data;
 	r2_stream <= r2_data;
