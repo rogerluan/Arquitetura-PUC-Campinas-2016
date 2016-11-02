@@ -14,7 +14,7 @@ END mem_wb;
 
 ARCHITECTURE Behavior OF mem_wb IS
 BEGIN
-	PROCESS
+	PROCESS (clock)
 	BEGIN
 	WAIT UNTIL clock'EVENT AND clock = '1';
 		reg_write <= wb_input(1);

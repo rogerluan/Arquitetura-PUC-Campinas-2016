@@ -12,7 +12,7 @@ END if_id;
 
 ARCHITECTURE Behavior OF if_id IS
 BEGIN
-	PROCESS
+	PROCESS (clock)
 	BEGIN
 	WAIT UNTIL clock'EVENT AND clock = '1';
 		next_address_output <= next_address_input;

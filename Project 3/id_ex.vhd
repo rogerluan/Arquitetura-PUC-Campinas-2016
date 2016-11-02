@@ -22,7 +22,7 @@ END id_ex;
 
 ARCHITECTURE Behavior OF id_ex IS
 BEGIN
-	PROCESS
+	PROCESS (clock)
 	BEGIN
 	WAIT UNTIL clock'EVENT AND clock = '1';
 		wb_output <= wb_input;
