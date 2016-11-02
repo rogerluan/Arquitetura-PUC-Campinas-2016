@@ -2,9 +2,9 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all ;
 
 ENTITY instruction_mem IS
-	GENERIC ( N : INTEGER := 32 ) ; 
-	PORT ( instruction_mem_address:  IN STD_LOGIC_VECTOR (N-1 DOWNTO 0);
-		   instruction: OUT STD_LOGIC_VECTOR (N-1 DOWNTO 0));
+	GENERIC ( address_size, instruction_size : INTEGER := 32 ) ; 
+	PORT ( instruction_mem_address:  IN STD_LOGIC_VECTOR (address_size-1 DOWNTO 0);
+		   instruction: OUT STD_LOGIC_VECTOR (instruction_size-1 DOWNTO 0));
 END instruction_mem;
 
 ARCHITECTURE Behavior OF instruction_mem IS
