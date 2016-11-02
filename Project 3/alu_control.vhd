@@ -9,7 +9,6 @@ ENTITY alu_control IS
 	PORT ( funct:  IN STD_LOGIC_VECTOR (5 DOWNTO 0);
 		   alu_op: IN STD_LOGIC_VECTOR (1 DOWNTO 0);
 		   alu_control: OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
-		
 END alu_control;
 
 ARCHITECTURE Behavior OF alu_control IS
