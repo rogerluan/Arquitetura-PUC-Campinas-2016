@@ -1,8 +1,5 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
--- Math Libraries
-USE ieee.std_logic_arith.all;
-USE ieee.std_logic_unsigned.all; 
 
 ENTITY unit_control IS
 	PORT ( opcode: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
