@@ -11,7 +11,8 @@ ENTITY registers_file IS
 END registers_file;
 
 ARCHITECTURE Behavior OF registers_file IS
-	SIGNAL registers: STD_LOGIC_VECTOR(number_of_registers-1 DOWNTO 0);
+	TYPE matrix IS ARRAY(number_of_registers-1 DOWNTO 0) of STD_LOGIC_VECTOR(data_size-1 DOWNTO 0);
+	SIGNAL registers: matrix;
 	SIGNAL reg_number1, reg_number2: INTEGER;
 BEGIN
 	PROCESS (clock)
