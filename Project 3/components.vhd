@@ -54,6 +54,21 @@ PACKAGE components IS
 			   ex: OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
 	END COMPONENT;
 
+	COMPONENT registers_file
+		GENERIC ( data_size, number_of_registers : INTEGER := 32 ) ; 
+		PORT ( read_reg1, read_reg2, write_reg: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+			   write_data: IN STD_LOGIC_VECTOR (data_size-1 DOWNTO 0);
+			   clock, reg_write: IN STD_LOGIC);
+			   read_data1, read_data2: OUT STD_LOGIC_VECTOR (data_size-1 DOWNTO 0));
+	END COMPONENT;
+
+	COMPONENT program_counter
+		GENERIC ( address_size: INTEGER := 32 );
+		PORT ( instruction: IN STD_LOGIC_VECTOR(address_size-1 DOWNTO 0);
+			   clock: IN STD_LOGIC;
+			   instruction_address: OUT STD_LOGIC_VECTOR(address_size-1 DOWNTO 0));
+	END COMPONENT;
+
 	-- Pipeline Components 
 
 	COMPONENT if_id
