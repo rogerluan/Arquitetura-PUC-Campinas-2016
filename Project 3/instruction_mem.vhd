@@ -10,7 +10,7 @@ END instruction_mem;
 
 ARCHITECTURE Behavior OF instruction_mem IS
 	SIGNAL mem_position: INTEGER;
-	TYPE matrix IS ARRAY(0 TO 1023) of STD_LOGIC_VECTOR(7 DOWNTO 0); --8 bits = 1 byte
+	TYPE matrix IS ARRAY(0 TO 4294967295) of STD_LOGIC_VECTOR(7 DOWNTO 0); --8 bits = 1 byte
 	SIGNAL instructions: matrix;
 BEGIN
 
