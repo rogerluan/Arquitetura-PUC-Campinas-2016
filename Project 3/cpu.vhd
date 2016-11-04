@@ -37,7 +37,7 @@ BEGIN
 		next_address_output <= pc_plus_four_fw1,
 		instruction_output <= instruction_fw1
 	);
-	id_to_ex: id_ex 
+	id_to_ex: id_ex
 	PORT MAP (
 	   wb_input => wb,
 	   m_input => m,
