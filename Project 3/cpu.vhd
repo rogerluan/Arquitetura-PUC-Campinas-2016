@@ -38,7 +38,7 @@ BEGIN
 		instruction_output <= instruction_fw1
 	);
 	id_to_ex: id_ex
-	PORT MAP (
+	PORT MAP (	
 	   wb_input => wb,
 	   m_input => m,
 	   ex_input => ex,
