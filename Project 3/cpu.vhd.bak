@@ -6,11 +6,12 @@ ENTITY cpu IS
 	GENERIC ( data_size, address_size, instruction_size: INTEGER := 32 ) ; 
 	PORT ( 	clock: IN STD_LOGIC;
 			debug_instruction, debug_instruction_fw1: OUT STD_LOGIC_VECTOR (instruction_size-1 DOWNTO 0);
-			debug_rs, debug_rt, debug_rd, debug_mem_data: OUT STD_LOGIC_VECTOR (data_size-1 DOWNTO 0);
+			debug_rs, debug_rt, debug_rd, debug_mem_data: OUT STD_LOGIC_VECTOR (data_size-1 DOWNTO 0)
 			debug_instruction_address, debug_pc_plus_four, debug_next_instruction_address, debug_mem_address: OUT STD_LOGIC_VECTOR (address_size-1 DOWNTO 0));
 END cpu;
 
 ARCHITECTURE Behavior OF cpu IS
+	SIGNAL data_size, instruction_size, address_size: INTEGER := 32;
 	SIGNAL useless_output, reg_dest, alu_src, zero_flag, zero_flag_fw1, branch, mem_read, mem_write, reg_write: STD_LOGIC;
 	SIGNAL pc_output, pc_plus_four, pc_plus_four_fw1, pc_plus_four_fw2, next_instruction, branch_address, branch_address_fw1: STD_LOGIC_VECTOR(address_size-1 DOWNTO 0);
 	SIGNAL instruction, instruction_fw1: STD_LOGIC_VECTOR(instruction_size-1 DOWNTO 0);
@@ -92,7 +93,7 @@ BEGIN
 		read_data_output => mem_read_data_fw1,
 		alu_result_output => alu_output_fw2,
 		reg_dest_output => final_reg_dest_fw2
-	);
+	};
 
 
 	-- Memory Components
