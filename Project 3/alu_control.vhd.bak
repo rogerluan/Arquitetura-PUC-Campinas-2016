@@ -20,7 +20,7 @@ BEGIN
 				alu_control <= "0010"; --SUM
 			WHEN "01" => --branch equal
 				alu_control <= "0110"; --SUBTRACTION
-			WHEN "10" | "11"=> -- R-Type or I-Type => The funct field of the instruction determines the ALU operation
+			WHEN "10" || "11"=> -- R-Type or I-Type => The funct field of the instruction determines the ALU operation
 				CASE funct IS 
 					WHEN "100000" => --SUM
 						alu_control <= "0010";

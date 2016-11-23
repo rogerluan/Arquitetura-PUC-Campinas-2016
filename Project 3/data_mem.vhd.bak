@@ -1,6 +1,5 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all ;
-use ieee.numeric_std.all;
 
 ENTITY data_mem IS
 	GENERIC ( address_size, data_size : INTEGER := 32 ); 
@@ -19,7 +18,7 @@ BEGIN
 		IF mem_write = '1' THEN
 			memory(to_integer(unsigned(data_mem_address))) <= write_data;
 		ELSIF mem_read = '1' THEN
-			read_data <= memory(to_integer(unsigned(data_mem_address)));
-		END IF;
+			read_data <= memory(to_integer(unsigned(instruction_mem_address)));
+		END IF
 	END PROCESS;
 END Behavior;
