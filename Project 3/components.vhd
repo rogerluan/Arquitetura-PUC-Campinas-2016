@@ -47,6 +47,11 @@ PACKAGE components IS
 			   SignExtOutput: OUT STD_LOGIC_VECTOR (31 DOWNTO 0));
 	END COMPONENT;
 
+	COMPONENT shift_left_2
+		PORT ( input_data: IN STD_LOGIC_VECTOR (N-1 DOWNTO 0);
+			   output_data: OUT STD_LOGIC_VECTOR (N-1 DOWNTO 0));
+	END COMPONENT;
+
 	COMPONENT unit_control
 		PORT ( opcode: IN STD_LOGIC_VECTOR (5 DOWNTO 0);
 			   wb: OUT STD_LOGIC_VECTOR (1 DOWNTO 0);

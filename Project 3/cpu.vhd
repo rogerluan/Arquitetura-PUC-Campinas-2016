@@ -15,7 +15,7 @@ ARCHITECTURE Behavior OF cpu IS
 	SIGNAL useless_output, reg_dest, alu_src, zero_flag, zero_flag_fw1, branch, mem_read, mem_write, reg_write: STD_LOGIC;
 	SIGNAL pc_output, pc_plus_four, pc_plus_four_fw1, pc_plus_four_fw2, next_instruction, branch_address, branch_address_fw1: STD_LOGIC_VECTOR(address_size-1 DOWNTO 0);
 	SIGNAL instruction, instruction_fw1: STD_LOGIC_VECTOR(instruction_size-1 DOWNTO 0);
-	SIGNAL read_data1, read_data2, read_data1_fw1, read_data2_fw1, read_data2_fw2, extended_imed, extended_imed_fw1, main_alu_src2, alu_output, alu_output_fw1, alu_output_fw2, mem_read_data, mem_read_data_fw1: STD_LOGIC_VECTOR(data_size-1 DOWNTO 0);
+	SIGNAL read_data1, read_data2, read_data1_fw1, read_data2_fw1, read_data2_fw2, extended_imed, extended_imed_fw1, extended_imed_sll, main_alu_src2, alu_output, alu_output_fw1, alu_output_fw2, mem_read_data, mem_read_data_fw1: STD_LOGIC_VECTOR(data_size-1 DOWNTO 0);
 	SIGNAL wb, wb_fw1, wb_fw2, alu_op: STD_LOGIC_VECTOR (1 DOWNTO 0);
 	SIGNAL m, m_fw1: STD_LOGIC_VECTOR (2 DOWNTO 0);
 	SIGNAL ex, alu_control: STD_LOGIC_VECTOR (3 DOWNTO 0);
@@ -24,7 +24,7 @@ BEGIN
 
 	-- ALU Components
 	pc_plus_four_adder: alu_component PORT MAP (pc_output, "00000000000000000000000000000100", "0010", useless_output, pc_plus_four);
-	branch_alu: alu_component PORT MAP (pc_plus_four_fw2, extended_imed_fw1 sll 2, "0010", useless_output, branch_address);
+	branch_alu: alu_component PORT MAP (pc_plus_four_fw2, extended_imed_sll, "0010", useless_output, branch_address);
 	main_alu: alu_component PORT MAP (read_data1_fw1, main_alu_src2, alu_control, zero_flag, alu_output);
 
 
@@ -127,6 +127,7 @@ BEGIN
 
 	-- Minor Components
 	sign_extend: sign_ext PORT MAP (instruction_fw1(instruction_size-17 DOWNTO 0), extended_imed);
+	shift_left: shift_left_2 PORT MAP (extended_imed_fw1, );
 
 
 	-- Debugging Variables
