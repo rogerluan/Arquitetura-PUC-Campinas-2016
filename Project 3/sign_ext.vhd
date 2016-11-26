@@ -2,7 +2,6 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all ;
 use ieee.numeric_std.all;
 
-
 ENTITY sign_ext IS
 	PORT ( SignExtInput:  IN STD_LOGIC_VECTOR (15 DOWNTO 0);
 		   SignExtOutput: OUT STD_LOGIC_VECTOR (31 DOWNTO 0));
