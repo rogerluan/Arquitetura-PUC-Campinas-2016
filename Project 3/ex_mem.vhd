@@ -19,7 +19,7 @@ END ex_mem;
 
 ARCHITECTURE Behavior OF ex_mem IS
 BEGIN
-	PROCESS (clock)
+	PROCESS
 	BEGIN
 	WAIT UNTIL clock'EVENT AND clock = '1';
 		wb_output <= wb_input;

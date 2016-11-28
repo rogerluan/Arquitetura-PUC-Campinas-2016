@@ -35,6 +35,13 @@ BEGIN
 				ex <= "0011"; --reg_dest = 0, alu_op = 01 (branch), alu_src = 1;
 			WHEN "000010" => --j
 				--to-do: implement jump
+				wb <= "10"; --reg_write = 1, mem_to_reg = 0;
+				m <= "000"; --branch = 0, mem_read = 0, mem_write = 0;
+				ex <= "1100"; --reg_dest = 1, alu_op = 10 (r-type), alu_src = 0;
+			WHEN OTHERS => --this last statement just repeats type-r. A future implementation must contain jump instructions
+				wb <= "10"; --reg_write = 1, mem_to_reg = 0;
+				m <= "000"; --branch = 0, mem_read = 0, mem_write = 0;
+				ex <= "1100"; --reg_dest = 1, alu_op = 10 (r-type), alu_src = 0;
 		END CASE;
 	END PROCESS;
 END Behavior;

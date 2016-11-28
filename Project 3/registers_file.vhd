@@ -17,18 +17,17 @@ ARCHITECTURE Behavior OF registers_file IS
 BEGIN
 	PROCESS (clock)
 	BEGIN
-	WAIT UNTIL clock'EVENT;
-		CASE (clock) IS
-			WHEN '1' => --clock event = rising edge
-				IF reg_write = '1' THEN
-					reg_number1 <= to_integer(unsigned(write_reg));
-					registers(reg_number1) <= write_data;
-				END IF ;
-			WHEN '0' => --clock event = falling edge
-				reg_number1 <= to_integer(unsigned(read_reg1));
-				read_data1 <= registers(reg_number1);
-				reg_number2 <= to_integer(unsigned(read_reg2));
-				read_data2 <= registers(reg_number2);
-		END CASE;
+	CASE (clock) IS
+		WHEN '1' => --clock event = rising edge
+			IF reg_write = '1' THEN
+				reg_number1 <= to_integer(unsigned(write_reg));
+				registers(reg_number1) <= write_data;
+			END IF ;
+		WHEN '0' => --clock event = falling edge
+			reg_number1 <= to_integer(unsigned(read_reg1));
+			read_data1 <= registers(reg_number1);
+			reg_number2 <= to_integer(unsigned(read_reg2));
+			read_data2 <= registers(reg_number2);
+	END CASE;
 	END PROCESS;
 END Behavior;

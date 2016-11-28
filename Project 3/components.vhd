@@ -5,6 +5,13 @@ USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all; 
 
 PACKAGE components IS
+	
+	COMPONENT alu_control
+		GENERIC ( N : INTEGER := 32 ) ; 
+		PORT ( funct:  IN STD_LOGIC_VECTOR (5 DOWNTO 0);
+			   alu_op: IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+			   alu_control: OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
+	END COMPONENT;
 
 	COMPONENT alu_component
 		GENERIC ( data_size : INTEGER := 32 ) ; 
@@ -14,25 +21,18 @@ PACKAGE components IS
 			   alu_output: OUT STD_LOGIC_VECTOR (data_size-1 DOWNTO 0));
 	END COMPONENT;
 
-	COMPONENT alu_control
-		GENERIC ( N : INTEGER := 32 ) ; 
-		PORT ( funct:  IN STD_LOGIC_VECTOR (5 DOWNTO 0);
-			   alu_op: IN STD_LOGIC_VECTOR (1 DOWNTO 0);
-			   alu_control: OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
-	END COMPONENT;
-
 	COMPONENT instruction_mem
 		GENERIC ( address_size, instruction_size : INTEGER := 32 ) ; 
 		PORT ( instruction_mem_address:  IN STD_LOGIC_VECTOR (address_size-1 DOWNTO 0);
 			   instruction: OUT STD_LOGIC_VECTOR (instruction_size-1 DOWNTO 0));
 	END COMPONENT;
-
+	
 	COMPONENT data_mem
-		GENERIC ( N : INTEGER := 32 ) ; 
-		PORT ( data_mem_address:  IN STD_LOGIC_VECTOR (N-1 DOWNTO 0);
-			   write_data: IN STD_LOGIC_VECTOR (N-1 DOWNTO 0);
-			   mem_read, mem_write: STD_LOGIC;
-			   read_data: OUT STD_LOGIC_VECTOR (N-1 DOWNTO 0));
+	GENERIC ( address_size, data_size : INTEGER := 32 ); 
+	PORT ( data_mem_address:  IN STD_LOGIC_VECTOR (address_size-1 DOWNTO 0);
+		   write_data: IN STD_LOGIC_VECTOR (data_size-1 DOWNTO 0);
+		   mem_read, mem_write: IN STD_LOGIC;
+		   read_data: OUT STD_LOGIC_VECTOR (data_size-1 DOWNTO 0));
 	END COMPONENT;
 
 	COMPONENT mux2to1

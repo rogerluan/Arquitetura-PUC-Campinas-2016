@@ -11,7 +11,7 @@ END program_counter;
 
 ARCHITECTURE Behavior OF program_counter IS
 BEGIN
-	PROCESS (clock)
+	PROCESS
 	BEGIN
 	WAIT UNTIL clock'EVENT AND clock = '1';
 		instruction_address <= next_instruction_address;

@@ -30,6 +30,8 @@ BEGIN
 						alu_control <= "0000";
 					WHEN "100101" => --OR
 						alu_control <= "0001";
+					WHEN OTHERS =>
+						alu_control <= "0010"; --defaults to sum
 				END CASE;
 		END CASE;
 	END PROCESS;

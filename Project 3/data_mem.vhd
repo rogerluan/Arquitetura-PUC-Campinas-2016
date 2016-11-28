@@ -14,7 +14,7 @@ ARCHITECTURE Behavior OF data_mem IS
 	TYPE matrix IS ARRAY(0 TO 4294967295) of STD_LOGIC_VECTOR(data_size-1 DOWNTO 0);
 	SIGNAL memory: matrix;
 BEGIN
-	PROCESS
+	PROCESS (mem_write, mem_read)
 	BEGIN
 		IF mem_write = '1' THEN
 			memory(to_integer(unsigned(data_mem_address))) <= write_data;
