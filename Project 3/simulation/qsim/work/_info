@@ -1,0 +1,50 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/felip/OneDrive/Documentos/documentos/puc_4semestre/Github/Arquitetura-PUC-Campinas-2016/Project 3/simulation/qsim
+vcpu
+!s110 1480424304
+!i10b 1
+!s100 ccX`92TUB1f6S44Ub2^R?3
+IiIEFOjlaCMZ4HHIz3M4Dg1
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1480424296
+8cpu.vo
+Fcpu.vo
+L0 32
+Z2 OV;L;10.4d;61
+r1
+!s85 0
+31
+!s108 1480424304.000000
+!s107 cpu.vo|
+!s90 -work|work|cpu.vo|
+!i113 1
+Z3 o-work work
+vcpu_vlg_vec_tst
+!s110 1480424305
+!i10b 1
+!s100 =oQ6S=YAFk;[5?fOmHebQ2
+Io9V:UcSGETjJfLm9fE<dz3
+R1
+R0
+w1480424295
+8Waveform.vwf.vt
+FWaveform.vwf.vt
+L0 30
+R2
+r1
+!s85 0
+31
+!s108 1480424305.000000
+!s107 Waveform.vwf.vt|
+!s90 -work|work|Waveform.vwf.vt|
+!i113 1
+R3

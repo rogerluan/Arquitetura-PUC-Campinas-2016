@@ -12,26 +12,26 @@ END instruction_mem;
 
 ARCHITECTURE Behavior OF instruction_mem IS
 	SIGNAL mem_position: INTEGER;
-	TYPE matrix IS ARRAY(0 TO 4294967295) of STD_LOGIC_VECTOR(7 DOWNTO 0); --8 bits = 1 byte
-	SIGNAL instructions: MEM;
+	TYPE matrix IS ARRAY(0 TO 6000) of STD_LOGIC_VECTOR(7 DOWNTO 0); --8 bits = 1 byte
+	SIGNAL instructions: matrix;
 BEGIN
 
 	-- This will be all hard coded, just for practical and study purposes.
 
 	-- HERE WE SHOULD HAVE AT LEAST 1 EXAMPLE OF EACH INSTRUCTION IN THE INSTRUCTION SET
-	instructions(0) <= "01010101"; --beginning of the 1st instruction
-	instructions(1) <= "01010101";
-	instructions(2) <= "01010101";
-	instructions(3) <= "01010101";
-	instructions(4) <= "01010101"; --beginning of the 2nd instruction
+	instructions(0) <= "00100000"; -- addi $0, $0, 3
+	instructions(1) <= "00000000";
+	instructions(2) <= "00000000";
+	instructions(3) <= "00000011";
+	instructions(4) <= "01010101"; -- add
 	instructions(5) <= "01010101";
 	instructions(6) <= "01010101";
 	instructions(7) <= "01010101";
-	instructions(8) <= "01010101"; --beginning of the 3rd instruction
+	instructions(8) <= "01010101"; -- subi
 	instructions(9) <= "01010101";
 	instructions(10) <= "01010101";
 	instructions(11) <= "01010101";
-	instructions(12) <= "01010101"; --beginning of the 4th instruction
+	instructions(12) <= "01010101"; --sub
 	instructions(13) <= "01010101";
 	instructions(14) <= "01010101";
 	instructions(15) <= "01010101";

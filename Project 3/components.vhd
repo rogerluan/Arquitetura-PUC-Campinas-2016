@@ -70,7 +70,7 @@ PACKAGE components IS
 
 	COMPONENT program_counter
 		GENERIC ( address_size: INTEGER := 32 );
-		PORT ( instruction: IN STD_LOGIC_VECTOR(address_size-1 DOWNTO 0);
+		PORT ( next_instruction_address: IN STD_LOGIC_VECTOR(address_size-1 DOWNTO 0);
 			   clock: IN STD_LOGIC;
 			   instruction_address: OUT STD_LOGIC_VECTOR(address_size-1 DOWNTO 0));
 	END COMPONENT;

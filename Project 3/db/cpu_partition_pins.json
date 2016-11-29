@@ -1,0 +1,501 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "debug_instruction[0]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[2]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[4]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[6]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[8]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[10]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[12]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[14]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[16]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[18]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[20]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[22]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[24]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[26]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[28]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction[30]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[0]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[2]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[4]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[6]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[8]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[10]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[12]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[14]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[16]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[18]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[20]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[22]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[24]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[26]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[28]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_fw1[30]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[2]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[3]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[4]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[5]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[6]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[7]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[8]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[9]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[10]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[11]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[12]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[13]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[14]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[15]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[16]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[17]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[18]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[19]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[20]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[21]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[22]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[23]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[24]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[25]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[26]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[27]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[28]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[29]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[30]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_instruction_address[31]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[2]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[3]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[4]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[5]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[6]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[7]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[8]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[9]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[10]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[11]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[12]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[13]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[14]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[15]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[16]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[17]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[18]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[19]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[20]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[21]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[22]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[23]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[24]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[25]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[26]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[27]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[28]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[29]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[30]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_pc_plus_four[31]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[2]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[3]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[4]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[5]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[6]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[7]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[8]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[9]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[10]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[11]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[12]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[13]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[14]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[15]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[16]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[17]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[18]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[19]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[20]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[21]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[22]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[23]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[24]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[25]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[26]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[27]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[28]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[29]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[30]",
+					"strict" : false
+				},
+				{
+					"name" : "debug_next_instruction_address[31]",
+					"strict" : false
+				},
+				{
+					"name" : "clock",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

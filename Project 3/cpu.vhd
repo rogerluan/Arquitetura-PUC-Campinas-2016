@@ -113,7 +113,7 @@ BEGIN
 										reg_write, 
 										read_data1,
 										read_data2);
-	pc: program_counter PORT MAP (next_instruction, clock, pc_output);
+	program_counter_component: program_counter PORT MAP (next_instruction, clock, pc_output);
 
 
 	-- Multiplexors
