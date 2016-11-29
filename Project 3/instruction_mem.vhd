@@ -12,9 +12,7 @@ END instruction_mem;
 
 ARCHITECTURE Behavior OF instruction_mem IS
 	SIGNAL mem_position: INTEGER;
-	type MEM_ARRAY is array (7 downto 0) of STD_LOGIC;
-	type MEM is array (0 to 4294967295) of MEM_ARRAY;
-	--TYPE matrix IS ARRAY(0 TO 4294967295) of STD_LOGIC_VECTOR(7 DOWNTO 0); --8 bits = 1 byte
+	TYPE matrix IS ARRAY(0 TO 4294967295) of STD_LOGIC_VECTOR(7 DOWNTO 0); --8 bits = 1 byte
 	SIGNAL instructions: MEM;
 BEGIN
 
@@ -76,6 +74,6 @@ BEGIN
 	-- ...this should go on, but we only need to test the 13 instructions
 
 	mem_position <= to_integer(unsigned(instruction_mem_address));
-	instruction <= unsigned(instructions(mem_position)) & unsigned(instructions(mem_position)) & unsigned(instructions(mem_position)) & unsigned(instructions(mem_position)); --concatenate 4 sequences of bytes in order to build the full 32 bits instruction
+	instruction <= instructions(mem_position) & instructions(mem_position) & instructions(mem_position) & instructions(mem_position); --concatenate 4 sequences of bytes in order to build the full 32 bits instruction
 	--instruction <= "00001111" & "11110000" & "11110000" & "00001111"; --testing
 END Behavior;
