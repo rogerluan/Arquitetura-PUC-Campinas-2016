@@ -1,7 +1,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- Math Libraries
-USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all; 
 use ieee.numeric_std.all;
 
