@@ -27,3 +27,6 @@ xcuserdata
 *.xccheckout
 *.moved-aside
 *.xcuserstate
+
+## Auto Generated Backup Files
+*.bak
