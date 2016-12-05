@@ -12,33 +12,33 @@ END instruction_mem;
 
 ARCHITECTURE Behavior OF instruction_mem IS
 	SIGNAL mem_position: INTEGER;
-	TYPE matrix IS ARRAY(0 TO 6000) of STD_LOGIC_VECTOR(7 DOWNTO 0); --8 bits = 1 byte
-	SIGNAL instructions: matrix;
+	TYPE matrix IS ARRAY(0 TO 4294967295) of STD_LOGIC_VECTOR(7 DOWNTO 0); --8 bits = 1 byte
+	SIGNAL instructions: MEM;
 BEGIN
 
 	-- This will be all hard coded, just for practical and study purposes.
 
 	-- HERE WE SHOULD HAVE AT LEAST 1 EXAMPLE OF EACH INSTRUCTION IN THE INSTRUCTION SET
-	instructions(0) <= "00100000"; -- addi $0, $0, 3
-	instructions(1) <= "00000000";
-	instructions(2) <= "00000000";
-	instructions(3) <= "00000011";
-	instructions(4) <= "00000000"; -- add $1, $1, $0
-	instructions(5) <= "00100001";
-	instructions(6) <= "00000000";
-	instructions(7) <= "00000000";
-	instructions(8) <= "00110000"; -- subi $2, $1, 2
-	instructions(9) <= "01000001";
-	instructions(10) <= "00000010";
-	instructions(11) <= "00000000";
-	instructions(12) <= "00000000"; --sub $3, $0, $2
-	instructions(13) <= "01100010";
-	instructions(14) <= "00000000";
-	instructions(15) <= "00000000";
-	instructions(16) <= "10001100"; --lw $4 $a($1)
-	instructions(17) <= "10000001";
-	instructions(18) <= "00000000";
-	instructions(19) <= "00000000";
+	instructions(0) <= "01010101"; --beginning of the 1st instruction
+	instructions(1) <= "01010101";
+	instructions(2) <= "01010101";
+	instructions(3) <= "01010101";
+	instructions(4) <= "01010101"; --beginning of the 2nd instruction
+	instructions(5) <= "01010101";
+	instructions(6) <= "01010101";
+	instructions(7) <= "01010101";
+	instructions(8) <= "01010101"; --beginning of the 3rd instruction
+	instructions(9) <= "01010101";
+	instructions(10) <= "01010101";
+	instructions(11) <= "01010101";
+	instructions(12) <= "01010101"; --beginning of the 4th instruction
+	instructions(13) <= "01010101";
+	instructions(14) <= "01010101";
+	instructions(15) <= "01010101";
+	instructions(16) <= "01010101"; --beginning of the 5th instruction
+	instructions(17) <= "01010101";
+	instructions(18) <= "01010101";
+	instructions(19) <= "01010101";
 	instructions(20) <= "01010101"; --beginning of the 6th instruction
 	instructions(21) <= "01010101";
 	instructions(22) <= "01010101";
